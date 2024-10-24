@@ -1,5 +1,7 @@
 package com.gravatar.quickeditor.ui.components
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.Spring
@@ -24,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -40,13 +43,13 @@ internal fun PickerPopup(
     anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
     onDismissRequest: () -> Unit,
-    popupButtons: List<@Composable () -> Unit>,
+    popupItems: List<PickerPopupItem>,
 ) {
     PickerPopup(
         anchorAlignment = anchorAlignment,
         anchorBounds = anchorBounds,
         onDismissRequest = onDismissRequest,
-        popupButtons = popupButtons,
+        popupItems = popupItems,
         state = remember {
             MutableTransitionState(false).apply {
                 // Start the animation immediately.
@@ -61,7 +64,7 @@ private fun PickerPopup(
     anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
     onDismissRequest: () -> Unit,
-    popupButtons: List<@Composable () -> Unit>,
+    popupItems: List<PickerPopupItem>,
     state: MutableTransitionState<Boolean>,
 ) {
     val cornerRadius = 8.dp
@@ -100,9 +103,15 @@ private fun PickerPopup(
                         shadowElevation = 2.dp,
                     ) {
                         LazyColumn {
-                            itemsIndexed(popupButtons) { index, item ->
-                                item()
-                                if (index < popupButtons.size - 1) {
+                            itemsIndexed(popupItems) { index, item ->
+                                PopupButton(
+                                    text = stringResource(item.text),
+                                    iconRes = item.iconRes,
+                                    contentDescription = stringResource(item.contentDescription),
+                                    shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
+                                    onClick = item.onClick,
+                                )
+                                if (index < popupItems.size - 1) {
                                     HorizontalDivider()
                                 }
                             }
@@ -116,6 +125,13 @@ private fun PickerPopup(
 
 @Composable
 private fun Dp.dpToPx() = with(LocalDensity.current) { this@dpToPx.toPx() }
+
+internal data class PickerPopupItem(
+    @StringRes val text: Int,
+    @DrawableRes val iconRes: Int,
+    @StringRes val contentDescription: Int,
+    val onClick: () -> Unit,
+)
 
 private fun calculatePopupXOffset(
     anchorAlignment: Alignment.Horizontal,
