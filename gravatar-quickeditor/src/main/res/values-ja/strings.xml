@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Translation-Revision-Date: 2024-10-03 09:54:03+0000
+Translation-Revision-Date: 2024-10-24 09:54:02+0000
 Plural-Forms: nplurals=1; plural=0;
 Generator: GlotPress/2.4.0-alpha
 Language: ja_JP
 -->
 <resources>
+    <string name="gravatar_avatar_upload_failure_image_too_big">提供された画像は最大サイズの10MB を超えています。</string>
+    <string name="gravatar_qe_dismiss">閉じる</string>
+    <string name="gravatar_qe_camera_permission_rationale_message">写真を撮影するには、カメラのアクセス権限を許可する必要があります。 アプリの設定でアクセス権限を許可できます。</string>
+    <string name="gravatar_qe_permission_required_alert_title">アクセス権限の許可が必要です</string>
     <string name="oauth_email_associated_error_message">メールアドレスを確認中にエラーが発生しました。</string>
     <string name="avatar_upload_failure_dialog_remove_upload">アップロードを削除</string>
     <string name="avatar_upload_failure_dialog_title">画像をアップロードできませんでした</string>

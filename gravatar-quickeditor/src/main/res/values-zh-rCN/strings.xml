@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Translation-Revision-Date: 2024-10-03 16:54:03+0000
+Translation-Revision-Date: 2024-10-23 13:54:03+0000
 Plural-Forms: nplurals=1; plural=0;
 Generator: GlotPress/2.4.0-alpha
 Language: zh_CN
 -->
 <resources>
+    <string name="gravatar_avatar_upload_failure_image_too_big">所提供图片的大小超出最大值：10 MB</string>
+    <string name="gravatar_qe_dismiss">忽略</string>
+    <string name="gravatar_qe_camera_permission_rationale_message">要拍摄照片，您需要授予相机权限。 您可以在应用程序设置中授予该权限。</string>
+    <string name="gravatar_qe_permission_required_alert_title">需要权限</string>
     <string name="oauth_email_associated_error_message">验证您的电子邮件地址时出错。</string>
     <string name="avatar_upload_failure_dialog_remove_upload">移除上传内容</string>
     <string name="avatar_upload_failure_dialog_title">无法上传图片</string>

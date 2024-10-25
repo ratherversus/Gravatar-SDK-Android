@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Translation-Revision-Date: 2024-10-04 09:54:03+0000
+Translation-Revision-Date: 2024-10-24 09:54:03+0000
 Plural-Forms: nplurals=1; plural=0;
 Generator: GlotPress/2.4.0-alpha
 Language: ko_KR
 -->
 <resources>
+    <string name="gravatar_avatar_upload_failure_image_too_big">제공된 이미지가 최대 크기(10MB)를 초과합니다.</string>
+    <string name="gravatar_qe_dismiss">해제</string>
+    <string name="gravatar_qe_camera_permission_rationale_message">사진을 찍으려면 카메라 권한을 부여해야 합니다. 권한은 앱 설정에서 부여할 수 있습니다.</string>
+    <string name="gravatar_qe_permission_required_alert_title">권한 필수</string>
     <string name="oauth_email_associated_error_message">이메일 확인 중 문제가 발생했습니다.</string>
     <string name="avatar_upload_failure_dialog_remove_upload">업로드 제거</string>
     <string name="avatar_upload_failure_dialog_title">이미지 업로드 불가</string>

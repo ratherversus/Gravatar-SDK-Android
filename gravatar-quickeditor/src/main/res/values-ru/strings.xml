@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Translation-Revision-Date: 2024-10-03 16:54:03+0000
+Translation-Revision-Date: 2024-10-24 15:54:03+0000
 Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);
 Generator: GlotPress/2.4.0-alpha
 Language: ru
 -->
 <resources>
+    <string name="gravatar_avatar_upload_failure_image_too_big">Размер предоставленного изображения превосходит максимально допустимый: 10 МБ</string>
+    <string name="gravatar_qe_dismiss">Закрыть</string>
+    <string name="gravatar_qe_camera_permission_rationale_message">Чтобы сделать фотографию, требуется разрешение на доступ к камере. Вы можете дать разрешение в настройках приложения.</string>
+    <string name="gravatar_qe_permission_required_alert_title">Требуются права доступа</string>
     <string name="oauth_email_associated_error_message">Что-то пошло не так при проверке адреса эл. почты.</string>
     <string name="avatar_upload_failure_dialog_remove_upload">Удалить загрузку</string>
     <string name="avatar_upload_failure_dialog_title">Не удалось загрузить изображение</string>
