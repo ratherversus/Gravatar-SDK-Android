@@ -28,15 +28,28 @@ public class AvatarService(private val okHttpClient: OkHttpClient? = null) {
      *
      * @param file The image file to upload
      * @param oauthToken The OAuth token to use for authentication
+     * @param hash The hash of the email to associate the avatar with.
+     * If null the primary email of the account will be used.
+     * @param selectAvatar Determines if the uploaded image should be set automatically as the avatar
+     * for the given hash. If null, the avatar will be selected only if no other avatar is set.
      */
-    public suspend fun upload(file: File, oauthToken: String): Avatar = runThrowingExceptionRequest {
+    public suspend fun upload(
+        file: File,
+        oauthToken: String,
+        hash: Hash? = null,
+        selectAvatar: Boolean? = null,
+    ): Avatar = runThrowingExceptionRequest {
         withContext(GravatarSdkDI.dispatcherIO) {
             val service = instance.getGravatarV3Service(okHttpClient, oauthToken)
 
             val filePart =
                 MultipartBody.Part.createFormData("image", file.name, file.asRequestBody())
 
-            val response = service.uploadAvatar(filePart)
+            val response = service.uploadAvatar(
+                data = filePart,
+                selectedEmailHash = hash?.toString(),
+                selectAvatar = selectAvatar,
+            )
 
             if (response.isSuccessful && response.body() != null) {
                 response.body()!!
@@ -59,11 +72,19 @@ public class AvatarService(private val okHttpClient: OkHttpClient? = null) {
      * @param file The image file to upload
      * @param oauthToken The OAuth token to use for authentication
      * @return The result of the operation
+     * @param hash The hash of the email to associate the avatar with.
+     * If null the primary email of the account will be used.
+     * @param selectAvatar Determines if the uploaded image should be set automatically as the avatar
+     * for the given hash. If null, the avatar will be selected only if no other avatar is set.
      */
-    public suspend fun uploadCatching(file: File, oauthToken: String): GravatarResult<Avatar, ErrorType> =
-        runCatchingRequest {
-            upload(file, oauthToken)
-        }
+    public suspend fun uploadCatching(
+        file: File,
+        oauthToken: String,
+        hash: Hash? = null,
+        selectAvatar: Boolean? = null,
+    ): GravatarResult<Avatar, ErrorType> = runCatchingRequest {
+        upload(file, oauthToken, hash, selectAvatar)
+    }
 
     /**
      * Retrieves a list of available avatars for the authenticated user.
