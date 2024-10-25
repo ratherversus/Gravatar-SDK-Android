@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Translation-Revision-Date: 2024-10-03 16:54:03+0000
+Translation-Revision-Date: 2024-10-23 13:54:03+0000
 Plural-Forms: nplurals=2; plural=n > 1;
 Generator: GlotPress/2.4.0-alpha
 Language: fr
 -->
 <resources>
+    <string name="gravatar_avatar_upload_failure_image_too_big">L’image fournie dépasse la taille maximum : 10 Mo</string>
+    <string name="gravatar_qe_dismiss">Ignorer</string>
+    <string name="gravatar_qe_camera_permission_rationale_message">Pour prendre une photo, vous devez accorder les droits d’accès à l’appareil photo. Vous pouvez les accorder dans les réglages de l’application.</string>
+    <string name="gravatar_qe_permission_required_alert_title">Autorisation requise</string>
     <string name="oauth_email_associated_error_message">Un problème est survenu lors de la vérification de votre adresse e-mail.</string>
     <string name="avatar_upload_failure_dialog_remove_upload">Supprimer le chargement</string>
     <string name="avatar_upload_failure_dialog_title">Impossible de charger l’image</string>
