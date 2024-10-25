@@ -719,10 +719,9 @@ class AvatarPickerViewModelTest {
             expectMostRecentItem()
 
             val emailAvatarsUpdated = emailAvatars.copy(
-                avatars = listOf(createAvatar("1"), createAvatar("3")),
+                avatars = listOf(createAvatar("1", isSelected = true), createAvatar("3", isSelected = false)),
                 selectedAvatarId = "1",
             )
-            coEvery { avatarRepository.getAvatars(any()) } returns GravatarResult.Success(emailAvatarsUpdated)
             viewModel.onEvent(AvatarPickerEvent.ImageCropped(uriOne))
 
             // State before upload starts
@@ -741,25 +740,6 @@ class AvatarPickerViewModelTest {
                 avatarPickerUiState,
                 awaitItem(),
             )
-
-            // State produced by fetchAvatars within Upload.Success
-            avatarPickerUiState = AvatarPickerUiState(
-                email = email,
-                emailAvatars = emailAvatarsUpdated,
-                error = null,
-                profile = ComponentState.Loaded(profile),
-                selectingAvatarId = null,
-                uploadingAvatar = uriOne,
-                scrollToIndex = 0,
-                avatarPickerContentLayout = avatarPickerContentLayout,
-                avatarUpdates = 0,
-            )
-
-            assertEquals(
-                avatarPickerUiState,
-                awaitItem(),
-            )
-
             // State produced before finishing uploadAvatar, just after fetchAvatars has finished
             avatarPickerUiState = AvatarPickerUiState(
                 email = email,
@@ -768,11 +748,10 @@ class AvatarPickerViewModelTest {
                 profile = ComponentState.Loaded(profile),
                 selectingAvatarId = null,
                 uploadingAvatar = null,
-                scrollToIndex = 0,
+                scrollToIndex = null,
                 avatarPickerContentLayout = avatarPickerContentLayout,
                 avatarUpdates = 1,
             )
-
             assertEquals(
                 avatarPickerUiState,
                 awaitItem(),
