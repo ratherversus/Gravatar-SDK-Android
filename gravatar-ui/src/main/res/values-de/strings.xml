@@ -6,9 +6,5 @@ Generator: GlotPress/2.4.0-alpha
 Language: de
 -->
 <resources>
-    <string name="gravatar_ui_empty_state_view_profile_button">Profil beanspruchen</string>
-    <string name="gravatar_ui_empty_state_user_info">Ort, Pronomen usw. hinzufügen</string>
-    <string name="gravatar_ui_empty_state_display_name">Dein Name</string>
-    <string name="gravatar_ui_empty_state_about_me">Zeig der Welt, wer du bist. Mit einem Avatar und einer Biografie, die dich überall im Web begleiten.</string>
-    <string name="gravatar_ui_view_profile_button">Profil anzeigen</string>
+
 </resources>

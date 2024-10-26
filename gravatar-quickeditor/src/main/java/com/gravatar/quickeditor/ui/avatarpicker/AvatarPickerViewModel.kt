@@ -146,34 +146,33 @@ internal class AvatarPickerViewModel(
             when (val result = avatarRepository.uploadAvatar(email, uri)) {
                 is GravatarResult.Success -> {
                     fileUtils.deleteFile(uri)
-                    val isAutoSelected = _uiState.value.emailAvatars?.selectedAvatarId == null
-                    if (isAutoSelected) {
-                        fetchAvatars(showLoading = false, scrollToSelected = true)
-                        _uiState.update { currentState ->
-                            currentState.copy(
-                                uploadingAvatar = null,
-                                avatarUpdates = currentState.avatarUpdates.inc(),
-                            )
-                        }
-                        if (_uiState.value.emailAvatars?.selectedAvatarId != null) {
-                            _actions.send(AvatarPickerAction.AvatarSelected)
-                        }
-                    } else {
-                        _uiState.update { currentState ->
-                            val avatar = result.value
-                            currentState.copy(
-                                uploadingAvatar = null,
-                                emailAvatars = currentState.emailAvatars?.copy(
-                                    avatars = buildList {
-                                        add(avatar)
-                                        addAll(
-                                            currentState.emailAvatars.avatars.filter { it.imageId != avatar.imageId },
-                                        )
-                                    },
-                                ),
-                                scrollToIndex = null,
-                            )
-                        }
+                    val avatar = result.value
+                    if (avatar.selected == true) {
+                        _actions.send(AvatarPickerAction.AvatarSelected)
+                    }
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            uploadingAvatar = null,
+                            emailAvatars = currentState.emailAvatars?.copy(
+                                avatars = buildList {
+                                    add(avatar)
+                                    addAll(
+                                        currentState.emailAvatars.avatars.filter { it.imageId != avatar.imageId },
+                                    )
+                                },
+                                selectedAvatarId = if (avatar.selected == true) {
+                                    avatar.imageId
+                                } else {
+                                    currentState.emailAvatars.selectedAvatarId
+                                },
+                            ),
+                            scrollToIndex = null,
+                            avatarUpdates = if (avatar.selected == true) {
+                                currentState.avatarUpdates.inc()
+                            } else {
+                                currentState.avatarUpdates
+                            },
+                        )
                     }
                 }
 
@@ -260,13 +259,7 @@ internal class AvatarPickerViewModel(
                 ErrorType.Server -> SectionError.ServerError
                 ErrorType.Network -> SectionError.NoInternetConnection
                 ErrorType.Unauthorized -> SectionError.InvalidToken(handleExpiredSession)
-                ErrorType.NotFound,
-                ErrorType.RateLimitExceeded,
-                ErrorType.Timeout,
-                is ErrorType.Unknown,
-                is ErrorType.InvalidRequest,
-                ErrorType.ContentLengthExceeded,
-                -> SectionError.Unknown
+                else -> SectionError.Unknown
             }
         }
 }
