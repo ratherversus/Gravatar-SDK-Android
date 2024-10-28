@@ -47,21 +47,21 @@ public enum class LocalIcon(
     public val shortname: String,
     @DrawableRes public val imageResource: Int,
 ) {
-    Gravatar("gravatar", R.drawable.gravatar_icon),
-    Calendly("calendly", R.drawable.calendly_icon),
-    Fediverse("fediverse", R.drawable.fediverse_icon),
-    Foursquare("foursquare", R.drawable.foursquare_icon),
-    Github("github", R.drawable.github_icon),
-    Instagram("instagram", R.drawable.instagram_icon),
-    Mastodon("mastodon", R.drawable.mastodongeneric_icon),
-    StackOverflow("stackoverflow", R.drawable.stackoverflow_icon),
-    TikTok("tiktok", R.drawable.tiktok_icon),
-    TripIt("tripit", R.drawable.tripit_icon),
-    Tumblr("tumblr", R.drawable.tumblr_icon),
-    Twitch("twitch", R.drawable.twitch_icon),
-    Twitter("twitter", R.drawable.twitter_icon),
-    Vimeo("vimeo", R.drawable.vimeo_icon),
-    WordPress("wordpress", R.drawable.wordpress_icon),
+    Gravatar("gravatar", R.drawable.gravatar_gravatar_icon),
+    Calendly("calendly", R.drawable.gravatar_calendly_icon),
+    Fediverse("fediverse", R.drawable.gravatar_fediverse_icon),
+    Foursquare("foursquare", R.drawable.gravatar_foursquare_icon),
+    Github("github", R.drawable.gravatar_github_icon),
+    Instagram("instagram", R.drawable.gravatar_instagram_icon),
+    Mastodon("mastodon", R.drawable.gravatar_mastodongeneric_icon),
+    StackOverflow("stackoverflow", R.drawable.gravatar_stackoverflow_icon),
+    TikTok("tiktok", R.drawable.gravatar_tiktok_icon),
+    TripIt("tripit", R.drawable.gravatar_tripit_icon),
+    Tumblr("tumblr", R.drawable.gravatar_tumblr_icon),
+    Twitch("twitch", R.drawable.gravatar_twitch_icon),
+    Twitter("twitter", R.drawable.gravatar_twitter_icon),
+    Vimeo("vimeo", R.drawable.gravatar_vimeo_icon),
+    WordPress("wordpress", R.drawable.gravatar_wordpress_icon),
     ;
 
     public companion object {
@@ -95,8 +95,8 @@ private fun mediaList(profile: Profile): List<SocialMedia> {
     val mediaList = mutableListOf<SocialMedia>()
     // Force the Gravatar icon
     mediaList.add(SocialMedia(profile.profileUrl().url, LocalIcon.Gravatar.name, icon = LocalIcon.Gravatar))
-    // List and filter the other accounts from the profile, keep the same order coming from UserProfile.accounts list
-    profile.verifiedAccounts.forEach { account ->
+    // List and filter non hidden accounts from the profile, keep the same order coming from UserProfile.accounts list
+    profile.verifiedAccounts.filter { !it.isHidden }.forEach { account ->
         try {
             if (LocalIcon.valueForLabel(account.serviceLabel) != null) {
                 // Add local icon if the shortname exists in our predefined list
@@ -245,6 +245,13 @@ private fun SocialIconRowPreview() {
                 url = URI("https://example.com")
                 serviceIcon = URI("https://example.com/icon.svg")
                 isHidden = false
+            },
+            VerifiedAccount {
+                serviceType = "twitch"
+                serviceLabel = "Twitch"
+                url = URI("https://example.com")
+                serviceIcon = URI("https://example.com/icon.svg")
+                isHidden = true
             },
             VerifiedAccount {
                 serviceType = "tumblr"
