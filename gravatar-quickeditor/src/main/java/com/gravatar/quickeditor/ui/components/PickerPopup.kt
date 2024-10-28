@@ -108,7 +108,7 @@ private fun PickerPopup(
                                     text = stringResource(item.text),
                                     iconRes = item.iconRes,
                                     contentDescription = stringResource(item.contentDescription),
-                                    shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
+                                    shape = popupButtonShape(index, popupItems.size, cornerRadius),
                                     onClick = item.onClick,
                                 )
                                 if (index < popupItems.size - 1) {
@@ -120,6 +120,19 @@ private fun PickerPopup(
                 }
             }
         }
+    }
+}
+
+private fun popupButtonShape(index: Int, totalItems: Int, cornerRadius: Dp): RoundedCornerShape {
+    return when (index) {
+        0 -> if (totalItems == 1) {
+            RoundedCornerShape(cornerRadius)
+        } else {
+            RoundedCornerShape(topStart = cornerRadius, topEnd = cornerRadius)
+        }
+
+        totalItems - 1 -> RoundedCornerShape(bottomStart = cornerRadius, bottomEnd = cornerRadius)
+        else -> RoundedCornerShape(0.dp)
     }
 }
 
