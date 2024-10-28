@@ -16,12 +16,11 @@ import com.gravatar.quickeditor.R
 import com.gravatar.ui.GravatarTheme
 
 @Composable
-internal fun MediaPickerPopup(
+internal fun AvatarMoreOptionsPickerPopup(
     anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
     onDismissRequest: () -> Unit,
-    onChoosePhotoClick: () -> Unit,
-    onTakePhotoClick: () -> Unit,
+    onAltTextClick: () -> Unit,
 ) {
     PickerPopup(
         anchorAlignment = anchorAlignment,
@@ -29,16 +28,10 @@ internal fun MediaPickerPopup(
         onDismissRequest = onDismissRequest,
         popupItems = listOf(
             PickerPopupItem(
-                text = R.string.gravatar_qe_avatar_picker_choose_a_photo,
-                iconRes = R.drawable.gravatar_photo_library,
-                contentDescription = R.string.gravatar_qe_photo_library_icon_description,
-                onClick = onChoosePhotoClick,
-            ),
-            PickerPopupItem(
-                text = R.string.gravatar_qe_avatar_picker_take_photo,
-                iconRes = R.drawable.gravatar_capture_photo,
-                contentDescription = R.string.gravatar_qe_capture_photo_icon_description,
-                onClick = onTakePhotoClick,
+                text = R.string.gravatar_qe_selectable_avatar_more_options_alt_text,
+                iconRes = R.drawable.gravatar_avatar_more_options_alt_text,
+                contentDescription = R.string.gravatar_qe_selectable_avatar_more_options_alt_text_content_description,
+                onClick = onAltTextClick,
             ),
         ),
     )
@@ -46,19 +39,18 @@ internal fun MediaPickerPopup(
 
 @Preview
 @Composable
-private fun MediaPickerPopupPreview() {
+private fun AvatarMoreOptionsPickerPopupPreview() {
     GravatarTheme {
         Box(
             modifier = Modifier
                 .size(300.dp)
                 .background(MaterialTheme.colorScheme.background),
         ) {
-            MediaPickerPopup(
+            AvatarMoreOptionsPickerPopup(
                 anchorAlignment = Alignment.Start,
                 onDismissRequest = {},
                 anchorBounds = Rect(Offset(0f, 300f), Size(1f, 1f)),
-                onChoosePhotoClick = {},
-                onTakePhotoClick = {},
+                onAltTextClick = {},
             )
         }
     }
