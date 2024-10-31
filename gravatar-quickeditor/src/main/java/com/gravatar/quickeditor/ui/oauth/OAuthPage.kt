@@ -77,7 +77,7 @@ internal fun OAuthPage(
                         split.first() to split.last()
                     }
                     ?.get("access_token")
-                    .let { URLDecoder.decode(it, "UTF-8") }
+                    ?.let { URLDecoder.decode(it, "UTF-8") }
 
                 if (token != null) {
                     viewModel.tokenReceived(email, token)
