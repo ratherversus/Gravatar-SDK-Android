@@ -1,11 +1,15 @@
 package com.gravatar.types
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 /**
  * Email address representation.
  *
  * @param address the email address
  */
-public class Email(private val address: String) {
+@Parcelize
+public class Email(private val address: String) : Parcelable {
     /**
      * Get a Gravatar hash for a given email address.
      *

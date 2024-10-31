@@ -3,6 +3,7 @@ import org.jetbrains.dokka.gradle.DokkaTaskPartial
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.parcelize)
     // Ktlint
     alias(libs.plugins.ktlint)
     // Detekt
