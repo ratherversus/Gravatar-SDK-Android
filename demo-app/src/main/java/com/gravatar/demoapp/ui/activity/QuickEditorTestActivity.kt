@@ -41,6 +41,7 @@ class QuickEditorTestActivity : AppCompatActivity() {
     private fun setupViews() {
         val profileCard = findViewById<ComposeView>(R.id.profile_card)
         val btnUpdateAvatar = findViewById<Button>(R.id.btn_update_avatar)
+        val btnUpdateAvatarWithQEActivity = findViewById<Button>(R.id.btn_update_avatar_qe_activity)
 
         profileCard.setContent {
             GravatarProfileSummary(emailAddress = BuildConfig.DEMO_EMAIL)
@@ -65,6 +66,22 @@ class QuickEditorTestActivity : AppCompatActivity() {
                 onDismiss = {
                     Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
                 },
+            )
+        }
+
+        btnUpdateAvatarWithQEActivity.setOnClickListener {
+            GravatarQuickEditor.showActivity(
+                context = this,
+                gravatarQuickEditorParams = GravatarQuickEditorParams {
+                    email = Email(BuildConfig.DEMO_EMAIL)
+                    avatarPickerContentLayout = AvatarPickerContentLayout.Horizontal
+                },
+                authenticationMethod = AuthenticationMethod.OAuth(
+                    OAuthParams {
+                        clientId = BuildConfig.DEMO_OAUTH_CLIENT_ID
+                        redirectUri = BuildConfig.DEMO_OAUTH_REDIRECT_URI
+                    },
+                ),
             )
         }
     }

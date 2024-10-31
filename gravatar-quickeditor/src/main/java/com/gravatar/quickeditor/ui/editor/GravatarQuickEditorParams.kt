@@ -1,6 +1,8 @@
 package com.gravatar.quickeditor.ui.editor
 
+import android.os.Parcelable
 import com.gravatar.types.Email
+import kotlinx.parcelize.Parcelize
 import java.util.Objects
 
 /**
@@ -9,10 +11,11 @@ import java.util.Objects
  * @property email The email of the user
  * @property avatarPickerContentLayout The layout direction used in the Avatar Picker.
  */
+@Parcelize
 public class GravatarQuickEditorParams private constructor(
     public val email: Email,
     public val avatarPickerContentLayout: AvatarPickerContentLayout,
-) {
+) : Parcelable {
     override fun toString(): String =
         "GravatarQuickEditorParams(email='$email', avatarPickerContentLayout=$avatarPickerContentLayout)"
 

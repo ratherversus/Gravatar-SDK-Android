@@ -56,6 +56,24 @@
 <!--            </intent-filter>-->
         </activity>
 
+        <!-- Gravatar QE Activity -->
+<!--        <activity-->
+<!--            android:name="com.gravatar.quickeditor.ui.GravatarQuickEditorActivity"-->
+<!--            tools:node="merge">-->
+
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+
+<!--                <data-->
+<!--                    android:host="${DEMO_OAUTH_REDIRECT_URI_HOST}"-->
+<!--                    android:scheme="${DEMO_OAUTH_REDIRECT_URI_SCHEME}" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
+
         <!-- Lib activities -->
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
