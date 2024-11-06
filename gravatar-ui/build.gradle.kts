@@ -4,12 +4,10 @@ plugins {
     id(libs.plugins.android.library.get().pluginId)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.publish.to.s3)
-    // Ktlint
     alias(libs.plugins.ktlint)
-    // Detekt
     alias(libs.plugins.detekt)
-    // Roborazzi
     alias(libs.plugins.roborazzi)
+    alias(libs.plugins.dokka)
 }
 
 android {

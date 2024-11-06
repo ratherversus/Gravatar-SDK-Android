@@ -3,14 +3,11 @@ import org.jetbrains.dokka.gradle.DokkaTaskPartial
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     alias(libs.plugins.kotlin.android)
-    // Ktlint
     alias(libs.plugins.ktlint)
-    // Detekt
     alias(libs.plugins.detekt)
-    // Publish artifact to S3
     alias(libs.plugins.publish.to.s3)
-    // OpenApi Generator
     alias(libs.plugins.openapi.generator)
+    alias(libs.plugins.dokka)
 }
 
 val sdkVersion = providers.exec {

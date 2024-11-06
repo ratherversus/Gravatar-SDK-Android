@@ -16,5 +16,3 @@ module:gravatar-ui
 com.gravatar.ui
 com.gravatar.ui.components
 com.gravatar.ui.components.atomic
-module:uitestutils
-com.gravatar.uitestutils

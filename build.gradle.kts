@@ -36,15 +36,6 @@ dependencies {
     dokkaHtmlMultiModulePlugin("org.jetbrains.dokka:android-documentation-plugin:1.9.20")
 }
 
-// Apply dokka to all subprojects except the demo-app
-subprojects {
-    if (this.name != "demo-app") {
-        apply {
-            plugin("org.jetbrains.dokka")
-        }
-    }
-}
-
 apiValidation {
 
     /**
