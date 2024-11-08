@@ -9,7 +9,7 @@ RESOURCES_TO_TRANSLATE = {
   File.join('gravatar-ui', 'src', 'main', 'res') => "#{GLOTPRESS_PROJECT_BASE_URL}/gravatar-ui/",
   File.join('gravatar-quickeditor', 'src', 'main', 'res') => "#{GLOTPRESS_PROJECT_BASE_URL}/gravatar-quick-editor/"
 }.freeze
-PROTOTYPE_BUILD_DOMAIN = 'https://d2twmm2nzpx3bg.cloudfront.net'
+PROTOTYPE_BUILD_DOMAIN = 'https://cdn.a8c-ci.services'
 
 SUPPORTED_LOCALES = [
   { glotpress: 'ar',    android: 'ar'     },
