@@ -1,10 +1,8 @@
 package com.gravatar.quickeditor
 
 import android.app.Activity
-import android.content.Context
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.gravatar.quickeditor.ui.GravatarQuickEditorActivity
 import com.gravatar.quickeditor.ui.editor.AuthenticationMethod
 import com.gravatar.quickeditor.ui.editor.GravatarQuickEditorDismissReason
 import com.gravatar.quickeditor.ui.editor.GravatarQuickEditorParams
@@ -60,25 +58,6 @@ public object GravatarQuickEditor {
     ) {
         val viewGroup: ViewGroup = fragment.requireActivity().findViewById(android.R.id.content)
         addQuickEditorToView(viewGroup, gravatarQuickEditorParams, authenticationMethod, onAvatarSelected, onDismiss)
-    }
-
-    /**
-     * Helper function to launch the Gravatar Quick Editor inside a Gravatar Activity.
-     *
-     * @param context The context to launch the Gravatar Quick Editor from.
-     * @param gravatarQuickEditorParams The parameters to configure the Quick Editor.
-     * @param authenticationMethod The method used for authentication with the Gravatar REST API.
-     */
-    @JvmStatic
-    public fun showActivity(
-        context: Context,
-        gravatarQuickEditorParams: GravatarQuickEditorParams,
-        authenticationMethod: AuthenticationMethod,
-    ) {
-        GravatarQuickEditorActivity.GravatarEditorActivityArguments(
-            gravatarQuickEditorParams = gravatarQuickEditorParams,
-            authenticationMethod = authenticationMethod,
-        ).startGravatarQuickEditor(context)
     }
 
     /**

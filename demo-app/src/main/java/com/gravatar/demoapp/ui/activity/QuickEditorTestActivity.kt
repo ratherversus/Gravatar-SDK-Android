@@ -7,19 +7,25 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.neverEqualPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import com.gravatar.demoapp.BuildConfig
 import com.gravatar.demoapp.R
 import com.gravatar.quickeditor.GravatarQuickEditor
+import com.gravatar.quickeditor.ui.GetQuickEditorResult
+import com.gravatar.quickeditor.ui.GravatarQuickEditorActivity
+import com.gravatar.quickeditor.ui.GravatarQuickEditorResult
 import com.gravatar.quickeditor.ui.editor.AuthenticationMethod
 import com.gravatar.quickeditor.ui.editor.AvatarPickerContentLayout
 import com.gravatar.quickeditor.ui.editor.GravatarQuickEditorParams
@@ -30,8 +36,27 @@ import com.gravatar.services.ProfileService
 import com.gravatar.types.Email
 import com.gravatar.ui.components.ComponentState
 import com.gravatar.ui.components.ProfileSummary
+import com.gravatar.ui.components.atomic.Avatar
 
 class QuickEditorTestActivity : AppCompatActivity() {
+    private var profileChanges by mutableStateOf(0)
+    private val getQEResult = registerForActivityResult(GetQuickEditorResult()) { quickEditorResult ->
+        when (quickEditorResult) {
+            GravatarQuickEditorResult.AVATAR_SELECTED -> {
+                profileChanges++
+                Toast.makeText(this, "Avatar selected", Toast.LENGTH_SHORT).show()
+            }
+
+            GravatarQuickEditorResult.DISMISSED -> {
+                Toast.makeText(this, "Dismissed", Toast.LENGTH_SHORT).show()
+            }
+
+            else -> {
+                Toast.makeText(this, "Unexpected...", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quick_editor_test)
@@ -44,7 +69,9 @@ class QuickEditorTestActivity : AppCompatActivity() {
         val btnUpdateAvatarWithQEActivity = findViewById<Button>(R.id.btn_update_avatar_qe_activity)
 
         profileCard.setContent {
-            GravatarProfileSummary(emailAddress = BuildConfig.DEMO_EMAIL)
+            key(profileChanges) {
+                GravatarProfileSummary(emailAddress = BuildConfig.DEMO_EMAIL)
+            }
         }
 
         btnUpdateAvatar.setOnClickListener {
@@ -70,17 +97,18 @@ class QuickEditorTestActivity : AppCompatActivity() {
         }
 
         btnUpdateAvatarWithQEActivity.setOnClickListener {
-            GravatarQuickEditor.showActivity(
-                context = this,
-                gravatarQuickEditorParams = GravatarQuickEditorParams {
-                    email = Email(BuildConfig.DEMO_EMAIL)
-                    avatarPickerContentLayout = AvatarPickerContentLayout.Horizontal
-                },
-                authenticationMethod = AuthenticationMethod.OAuth(
-                    OAuthParams {
-                        clientId = BuildConfig.DEMO_OAUTH_CLIENT_ID
-                        redirectUri = BuildConfig.DEMO_OAUTH_REDIRECT_URI
+            getQEResult.launch(
+                GravatarQuickEditorActivity.GravatarEditorActivityArguments(
+                    GravatarQuickEditorParams {
+                        email = Email(BuildConfig.DEMO_EMAIL)
+                        avatarPickerContentLayout = AvatarPickerContentLayout.Horizontal
                     },
+                    AuthenticationMethod.OAuth(
+                        OAuthParams {
+                            clientId = BuildConfig.DEMO_OAUTH_CLIENT_ID
+                            redirectUri = BuildConfig.DEMO_OAUTH_REDIRECT_URI
+                        },
+                    ),
                 ),
             )
         }
@@ -115,5 +143,13 @@ fun GravatarProfileSummary(emailAddress: String = "gravatar@automattic.com") {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
+        avatar = {
+            Avatar(
+                state = profileState,
+                size = 72.dp,
+                modifier = Modifier.clip(CircleShape),
+                forceRefresh = true,
+            )
+        },
     )
 }
