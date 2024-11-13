@@ -3,6 +3,7 @@ package com.gravatar.quickeditor.ui
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.TIRAMISU
 import android.os.Bundle
@@ -27,6 +28,13 @@ public class GravatarQuickEditorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, 0, 0)
+        } else {
+            @Suppress("DEPRECATION")
+            overridePendingTransition(0, 0)
+        }
+
         val arguments = requireNotNull(intent.parcelable<GravatarEditorActivityArguments>(EXTRA_QE_ARGUMENTS))
         setContent {
             GravatarQuickEditorBottomSheet(
@@ -61,6 +69,16 @@ public class GravatarQuickEditorActivity : AppCompatActivity() {
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
+    }
+
+    override fun finish() {
+        super.finish()
+        if (SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
+        } else {
+            @Suppress("DEPRECATION")
+            overridePendingTransition(0, 0)
+        }
     }
 
     /**
