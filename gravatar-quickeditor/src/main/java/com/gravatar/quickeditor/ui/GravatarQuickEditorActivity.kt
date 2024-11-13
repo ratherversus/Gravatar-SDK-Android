@@ -48,12 +48,12 @@ public class GravatarQuickEditorActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean("avatarHasChanged", avatarHasChanged)
+        outState.putBoolean(AVATAR_HAS_CHANGED_KEY, avatarHasChanged)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        avatarHasChanged = savedInstanceState.getBoolean("avatarHasChanged")
+        avatarHasChanged = savedInstanceState.getBoolean(AVATAR_HAS_CHANGED_KEY)
     }
 
     private fun finishWithResult() {
@@ -95,6 +95,7 @@ public class GravatarQuickEditorActivity : AppCompatActivity() {
 
     internal companion object {
         const val EXTRA_QE_ARGUMENTS: String = "qeArguments"
+        private const val AVATAR_HAS_CHANGED_KEY: String = "avatarHasChanged"
 
         const val ACTIVITY_RESULT: String = "activityResult"
         const val RESULT_DISMISSED: Int = 1000
