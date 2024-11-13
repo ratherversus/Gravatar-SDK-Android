@@ -364,7 +364,7 @@ getQEResult.launch(
 )
 ```
 
-It's important to note that using the `GravatarQuickEditorActivity` you'll only receive the result of the Quick Editor when it's dismissed not instantly as with using the `@Composable` component from your `singleTask` activity.
+It's important to note that using the `GravatarQuickEditorActivity` you'll only receive the result of the Quick Editor when it's dismissed not instantly as with using the `@Composable` component from your `singleTask` activity (see [Section 1.1](#11-using-you-own-activity-with-androidlaunchmodesingletask-recommended)).
 
 In the `demo-app` you can find a detailed implementation showing how to use the provided activity. See `QuickEditorTestActivity`.
 
