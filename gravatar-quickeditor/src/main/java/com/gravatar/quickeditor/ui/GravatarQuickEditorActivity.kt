@@ -1,5 +1,6 @@
 package com.gravatar.quickeditor.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
@@ -7,7 +8,9 @@ import android.os.Build.VERSION_CODES.TIRAMISU
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
+import com.gravatar.quickeditor.ui.GravatarQuickEditorActivity.GravatarEditorActivityArguments
 import com.gravatar.quickeditor.ui.editor.AuthenticationMethod
 import com.gravatar.quickeditor.ui.editor.GravatarQuickEditorParams
 import com.gravatar.quickeditor.ui.editor.bottomsheet.GravatarQuickEditorBottomSheet
@@ -20,6 +23,8 @@ import kotlinx.parcelize.Parcelize
  * @see GravatarEditorActivityArguments
  */
 public class GravatarQuickEditorActivity : AppCompatActivity() {
+    private var avatarHasChanged: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val arguments = requireNotNull(intent.parcelable<GravatarEditorActivityArguments>(EXTRA_QE_ARGUMENTS))
@@ -27,12 +32,35 @@ public class GravatarQuickEditorActivity : AppCompatActivity() {
             GravatarQuickEditorBottomSheet(
                 gravatarQuickEditorParams = arguments.gravatarQuickEditorParams,
                 authenticationMethod = arguments.authenticationMethod,
-                onAvatarSelected = {
-                    // Do nothing for the moment
-                },
-                onDismiss = { finish() },
+                onAvatarSelected = { avatarHasChanged = true },
+                onDismiss = { finishWithResult() },
             )
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("avatarHasChanged", avatarHasChanged)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        avatarHasChanged = savedInstanceState.getBoolean("avatarHasChanged")
+    }
+
+    private fun finishWithResult() {
+        val resultIntent = Intent().apply {
+            putExtra(
+                ACTIVITY_RESULT,
+                if (avatarHasChanged) {
+                    RESULT_AVATAR_SELECTED
+                } else {
+                    RESULT_DISMISSED
+                },
+            )
+        }
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
     }
 
     /**
@@ -45,20 +73,46 @@ public class GravatarQuickEditorActivity : AppCompatActivity() {
     public class GravatarEditorActivityArguments(
         public val gravatarQuickEditorParams: GravatarQuickEditorParams,
         public val authenticationMethod: AuthenticationMethod,
-    ) : Parcelable {
-        /**
-         * Starts the [GravatarQuickEditorActivity] with the provided arguments.
-         */
-        public fun startGravatarQuickEditor(context: Context) {
-            val intent = Intent(context, GravatarQuickEditorActivity::class.java)
-            intent.putExtra(EXTRA_QE_ARGUMENTS, this)
-            context.startActivity(intent)
+    ) : Parcelable
+
+    internal companion object {
+        const val EXTRA_QE_ARGUMENTS: String = "qeArguments"
+
+        const val ACTIVITY_RESULT: String = "activityResult"
+        const val RESULT_DISMISSED: Int = 1000
+        const val RESULT_AVATAR_SELECTED: Int = 1001
+    }
+}
+
+/**
+ * Activity result contract to get the result from the [GravatarQuickEditorActivity].
+ *
+ * @see GravatarQuickEditorResult
+ * @see GravatarEditorActivityArguments
+ */
+public class GetQuickEditorResult :
+    ActivityResultContract<GravatarEditorActivityArguments, GravatarQuickEditorResult?>() {
+    override fun createIntent(context: Context, input: GravatarEditorActivityArguments): Intent {
+        return Intent(context, GravatarQuickEditorActivity::class.java).apply {
+            putExtra(GravatarQuickEditorActivity.EXTRA_QE_ARGUMENTS, input)
         }
     }
 
-    private companion object {
-        private const val EXTRA_QE_ARGUMENTS = "qeArguments"
+    override fun parseResult(resultCode: Int, intent: Intent?): GravatarQuickEditorResult? {
+        return when (intent?.getIntExtra(GravatarQuickEditorActivity.ACTIVITY_RESULT, -1)) {
+            GravatarQuickEditorActivity.RESULT_AVATAR_SELECTED -> GravatarQuickEditorResult.AVATAR_SELECTED
+            GravatarQuickEditorActivity.RESULT_DISMISSED -> GravatarQuickEditorResult.DISMISSED
+            else -> null
+        }
     }
+}
+
+/**
+ * Result enum for the [GravatarQuickEditorActivity].
+ */
+public enum class GravatarQuickEditorResult {
+    AVATAR_SELECTED,
+    DISMISSED,
 }
 
 private inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
