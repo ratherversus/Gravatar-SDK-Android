@@ -1,5 +1,7 @@
 package com.gravatar.quickeditor.ui.oauth
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.util.Objects
 
 /**
@@ -8,10 +10,11 @@ import java.util.Objects
  * @property clientId The clientId of your WP.com application
  * @property redirectUri The redirect URI configured for your WP.com application
  */
+@Parcelize
 public class OAuthParams private constructor(
     public val clientId: String,
     public val redirectUri: String,
-) {
+) : Parcelable {
     override fun toString(): String = "OAuthParams(clientId=$clientId, redirectUri=$redirectUri)"
 
     override fun equals(other: Any?): Boolean {
