@@ -1,12 +1,15 @@
 package com.gravatar.quickeditor.ui.editor
 
+import android.os.Parcelable
 import com.gravatar.quickeditor.ui.oauth.OAuthParams
+import kotlinx.parcelize.Parcelize
 import java.util.Objects
 
 /**
  * Represents the authentication method used for the Gravatar Quick Editor.
  */
-public sealed class AuthenticationMethod {
+@Parcelize
+public sealed class AuthenticationMethod : Parcelable {
     /**
      * OAuth authentication method.
      *

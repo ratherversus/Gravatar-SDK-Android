@@ -1,16 +1,22 @@
 package com.gravatar.quickeditor.ui.editor
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 /**
  * The layout direction of the Avatar picker in the Quick Editor.
  */
-public sealed class AvatarPickerContentLayout {
+@Parcelize
+public sealed class AvatarPickerContentLayout : Parcelable {
     /**
-     * Horizontal scrolling for the Avatars.
+     * Horizontal layout.
      */
+    @Parcelize
     public data object Horizontal : AvatarPickerContentLayout()
 
     /**
-     * Vertical scrolling for the Avatars.
+     * Vertical layout.
      */
+    @Parcelize
     public data object Vertical : AvatarPickerContentLayout()
 }
