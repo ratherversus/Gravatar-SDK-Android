@@ -30,6 +30,8 @@ import java.util.Objects
  * @param firstName User's first name. This is only provided in authenticated API requests.
  * @param lastName User's last name. This is only provided in authenticated API requests.
  * @param isOrganization Whether user is an organization. This is only provided in authenticated API requests.
+ * @param headerImage The header image used in the main profile card.
+ * @param backgroundColor The profile background color.
  * @param links A list of links the user has added to their profile. This is only provided in authenticated API requests.
  * @param interests A list of interests the user has added to their profile. This is only provided in authenticated API requests.
  * @param payments
@@ -92,6 +94,12 @@ public class Profile private constructor(
     // Whether user is an organization. This is only provided in authenticated API requests.
     @Json(name = "is_organization")
     public val isOrganization: kotlin.Boolean? = null,
+    // The header image used in the main profile card.
+    @Json(name = "header_image")
+    public val headerImage: kotlin.String? = null,
+    // The profile background color.
+    @Json(name = "background_color")
+    public val backgroundColor: kotlin.String? = null,
     // A list of links the user has added to their profile. This is only provided in authenticated API requests.
     @Json(name = "links")
     public val links: kotlin.collections.List<Link>? = null,
@@ -115,7 +123,7 @@ public class Profile private constructor(
     @Json(name = "registration_date")
     public val registrationDate: String? = null,
 ) {
-    override fun toString(): String = "Profile(hash=$hash, displayName=$displayName, profileUrl=$profileUrl, avatarUrl=$avatarUrl, avatarAltText=$avatarAltText, location=$location, description=$description, jobTitle=$jobTitle, company=$company, verifiedAccounts=$verifiedAccounts, pronunciation=$pronunciation, pronouns=$pronouns, timezone=$timezone, languages=$languages, firstName=$firstName, lastName=$lastName, isOrganization=$isOrganization, links=$links, interests=$interests, payments=$payments, contactInfo=$contactInfo, gallery=$gallery, numberVerifiedAccounts=$numberVerifiedAccounts, lastProfileEdit=$lastProfileEdit, registrationDate=$registrationDate)"
+    override fun toString(): String = "Profile(hash=$hash, displayName=$displayName, profileUrl=$profileUrl, avatarUrl=$avatarUrl, avatarAltText=$avatarAltText, location=$location, description=$description, jobTitle=$jobTitle, company=$company, verifiedAccounts=$verifiedAccounts, pronunciation=$pronunciation, pronouns=$pronouns, timezone=$timezone, languages=$languages, firstName=$firstName, lastName=$lastName, isOrganization=$isOrganization, headerImage=$headerImage, backgroundColor=$backgroundColor, links=$links, interests=$interests, payments=$payments, contactInfo=$contactInfo, gallery=$gallery, numberVerifiedAccounts=$numberVerifiedAccounts, lastProfileEdit=$lastProfileEdit, registrationDate=$registrationDate)"
 
     override fun equals(other: Any?): Boolean = other is Profile &&
         hash == other.hash &&
@@ -135,6 +143,8 @@ public class Profile private constructor(
         firstName == other.firstName &&
         lastName == other.lastName &&
         isOrganization == other.isOrganization &&
+        headerImage == other.headerImage &&
+        backgroundColor == other.backgroundColor &&
         links == other.links &&
         interests == other.interests &&
         payments == other.payments &&
@@ -144,7 +154,7 @@ public class Profile private constructor(
         lastProfileEdit == other.lastProfileEdit &&
         registrationDate == other.registrationDate
 
-    override fun hashCode(): Int = Objects.hash(hash, displayName, profileUrl, avatarUrl, avatarAltText, location, description, jobTitle, company, verifiedAccounts, pronunciation, pronouns, timezone, languages, firstName, lastName, isOrganization, links, interests, payments, contactInfo, gallery, numberVerifiedAccounts, lastProfileEdit, registrationDate)
+    override fun hashCode(): Int = Objects.hash(hash, displayName, profileUrl, avatarUrl, avatarAltText, location, description, jobTitle, company, verifiedAccounts, pronunciation, pronouns, timezone, languages, firstName, lastName, isOrganization, headerImage, backgroundColor, links, interests, payments, contactInfo, gallery, numberVerifiedAccounts, lastProfileEdit, registrationDate)
 
     public class Builder {
         // The SHA256 hash of the user's primary email address.
@@ -215,6 +225,14 @@ public class Profile private constructor(
         @set:JvmSynthetic // Hide 'void' setter from Java
         public var isOrganization: kotlin.Boolean? = null
 
+        // The header image used in the main profile card.
+        @set:JvmSynthetic // Hide 'void' setter from Java
+        public var headerImage: kotlin.String? = null
+
+        // The profile background color.
+        @set:JvmSynthetic // Hide 'void' setter from Java
+        public var backgroundColor: kotlin.String? = null
+
         // A list of links the user has added to their profile. This is only provided in authenticated API requests.
         @set:JvmSynthetic // Hide 'void' setter from Java
         public var links: kotlin.collections.List<Link>? = null
@@ -279,6 +297,10 @@ public class Profile private constructor(
 
         public fun setIsOrganization(isOrganization: kotlin.Boolean?): Builder = apply { this.isOrganization = isOrganization }
 
+        public fun setHeaderImage(headerImage: kotlin.String?): Builder = apply { this.headerImage = headerImage }
+
+        public fun setBackgroundColor(backgroundColor: kotlin.String?): Builder = apply { this.backgroundColor = backgroundColor }
+
         public fun setLinks(links: kotlin.collections.List<Link>?): Builder = apply { this.links = links }
 
         public fun setInterests(interests: kotlin.collections.List<Interest>?): Builder = apply { this.interests = interests }
@@ -295,7 +317,7 @@ public class Profile private constructor(
 
         public fun setRegistrationDate(registrationDate: String?): Builder = apply { this.registrationDate = registrationDate }
 
-        public fun build(): Profile = Profile(hash!!, displayName!!, profileUrl!!, avatarUrl!!, avatarAltText!!, location!!, description!!, jobTitle!!, company!!, verifiedAccounts!!, pronunciation!!, pronouns!!, timezone, languages, firstName, lastName, isOrganization, links, interests, payments, contactInfo, gallery, numberVerifiedAccounts, lastProfileEdit, registrationDate)
+        public fun build(): Profile = Profile(hash!!, displayName!!, profileUrl!!, avatarUrl!!, avatarAltText!!, location!!, description!!, jobTitle!!, company!!, verifiedAccounts!!, pronunciation!!, pronouns!!, timezone, languages, firstName, lastName, isOrganization, headerImage, backgroundColor, links, interests, payments, contactInfo, gallery, numberVerifiedAccounts, lastProfileEdit, registrationDate)
     }
 }
 
