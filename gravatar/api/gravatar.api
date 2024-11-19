@@ -403,10 +403,11 @@ public final class com/gravatar/restapi/models/LinkKt {
 }
 
 public final class com/gravatar/restapi/models/Profile {
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/net/URI;Ljava/net/URI;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/util/List;Ljava/util/List;Lcom/gravatar/restapi/models/ProfilePayments;Lcom/gravatar/restapi/models/ProfileContactInfo;Ljava/util/List;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/net/URI;Ljava/net/URI;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lcom/gravatar/restapi/models/ProfilePayments;Lcom/gravatar/restapi/models/ProfileContactInfo;Ljava/util/List;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAvatarAltText ()Ljava/lang/String;
 	public final fun getAvatarUrl ()Ljava/net/URI;
+	public final fun getBackgroundColor ()Ljava/lang/String;
 	public final fun getCompany ()Ljava/lang/String;
 	public final fun getContactInfo ()Lcom/gravatar/restapi/models/ProfileContactInfo;
 	public final fun getDescription ()Ljava/lang/String;
@@ -414,6 +415,7 @@ public final class com/gravatar/restapi/models/Profile {
 	public final fun getFirstName ()Ljava/lang/String;
 	public final fun getGallery ()Ljava/util/List;
 	public final fun getHash ()Ljava/lang/String;
+	public final fun getHeaderImage ()Ljava/lang/String;
 	public final fun getInterests ()Ljava/util/List;
 	public final fun getJobTitle ()Ljava/lang/String;
 	public final fun getLanguages ()Ljava/util/List;
@@ -439,6 +441,7 @@ public final class com/gravatar/restapi/models/Profile$Builder {
 	public final fun build ()Lcom/gravatar/restapi/models/Profile;
 	public final fun getAvatarAltText ()Ljava/lang/String;
 	public final fun getAvatarUrl ()Ljava/net/URI;
+	public final fun getBackgroundColor ()Ljava/lang/String;
 	public final fun getCompany ()Ljava/lang/String;
 	public final fun getContactInfo ()Lcom/gravatar/restapi/models/ProfileContactInfo;
 	public final fun getDescription ()Ljava/lang/String;
@@ -446,6 +449,7 @@ public final class com/gravatar/restapi/models/Profile$Builder {
 	public final fun getFirstName ()Ljava/lang/String;
 	public final fun getGallery ()Ljava/util/List;
 	public final fun getHash ()Ljava/lang/String;
+	public final fun getHeaderImage ()Ljava/lang/String;
 	public final fun getInterests ()Ljava/util/List;
 	public final fun getJobTitle ()Ljava/lang/String;
 	public final fun getLanguages ()Ljava/util/List;
@@ -466,6 +470,8 @@ public final class com/gravatar/restapi/models/Profile$Builder {
 	public final synthetic fun setAvatarAltText (Ljava/lang/String;)V
 	public final fun setAvatarUrl (Ljava/net/URI;)Lcom/gravatar/restapi/models/Profile$Builder;
 	public final synthetic fun setAvatarUrl (Ljava/net/URI;)V
+	public final fun setBackgroundColor (Ljava/lang/String;)Lcom/gravatar/restapi/models/Profile$Builder;
+	public final synthetic fun setBackgroundColor (Ljava/lang/String;)V
 	public final fun setCompany (Ljava/lang/String;)Lcom/gravatar/restapi/models/Profile$Builder;
 	public final synthetic fun setCompany (Ljava/lang/String;)V
 	public final fun setContactInfo (Lcom/gravatar/restapi/models/ProfileContactInfo;)Lcom/gravatar/restapi/models/Profile$Builder;
@@ -480,6 +486,8 @@ public final class com/gravatar/restapi/models/Profile$Builder {
 	public final synthetic fun setGallery (Ljava/util/List;)V
 	public final fun setHash (Ljava/lang/String;)Lcom/gravatar/restapi/models/Profile$Builder;
 	public final synthetic fun setHash (Ljava/lang/String;)V
+	public final fun setHeaderImage (Ljava/lang/String;)Lcom/gravatar/restapi/models/Profile$Builder;
+	public final synthetic fun setHeaderImage (Ljava/lang/String;)V
 	public final fun setInterests (Ljava/util/List;)Lcom/gravatar/restapi/models/Profile$Builder;
 	public final synthetic fun setInterests (Ljava/util/List;)V
 	public final fun setIsOrganization (Ljava/lang/Boolean;)Lcom/gravatar/restapi/models/Profile$Builder;
@@ -582,6 +590,24 @@ public final class com/gravatar/restapi/models/ProfilePaymentsKt {
 	public static final synthetic fun ProfilePayments (Lkotlin/jvm/functions/Function1;)Lcom/gravatar/restapi/models/ProfilePayments;
 }
 
+public final class com/gravatar/restapi/models/Rating : java/lang/Enum {
+	public static final field Companion Lcom/gravatar/restapi/models/Rating$Companion;
+	public static final field G Lcom/gravatar/restapi/models/Rating;
+	public static final field PG Lcom/gravatar/restapi/models/Rating;
+	public static final field R Lcom/gravatar/restapi/models/Rating;
+	public static final field X Lcom/gravatar/restapi/models/Rating;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lcom/gravatar/restapi/models/Rating;
+	public static fun values ()[Lcom/gravatar/restapi/models/Rating;
+}
+
+public final class com/gravatar/restapi/models/Rating$Companion {
+	public final fun decode (Ljava/lang/Object;)Lcom/gravatar/restapi/models/Rating;
+	public final fun encode (Ljava/lang/Object;)Ljava/lang/String;
+}
+
 public final class com/gravatar/restapi/models/SetEmailAvatarRequest {
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
@@ -600,6 +626,30 @@ public final class com/gravatar/restapi/models/SetEmailAvatarRequest$Builder {
 
 public final class com/gravatar/restapi/models/SetEmailAvatarRequestKt {
 	public static final synthetic fun SetEmailAvatarRequest (Lkotlin/jvm/functions/Function1;)Lcom/gravatar/restapi/models/SetEmailAvatarRequest;
+}
+
+public final class com/gravatar/restapi/models/UpdateAvatarRequest {
+	public synthetic fun <init> (Lcom/gravatar/restapi/models/Rating;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAltText ()Ljava/lang/String;
+	public final fun getRating ()Lcom/gravatar/restapi/models/Rating;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/gravatar/restapi/models/UpdateAvatarRequest$Builder {
+	public fun <init> ()V
+	public final fun build ()Lcom/gravatar/restapi/models/UpdateAvatarRequest;
+	public final fun getAltText ()Ljava/lang/String;
+	public final fun getRating ()Lcom/gravatar/restapi/models/Rating;
+	public final fun setAltText (Ljava/lang/String;)Lcom/gravatar/restapi/models/UpdateAvatarRequest$Builder;
+	public final synthetic fun setAltText (Ljava/lang/String;)V
+	public final fun setRating (Lcom/gravatar/restapi/models/Rating;)Lcom/gravatar/restapi/models/UpdateAvatarRequest$Builder;
+	public final synthetic fun setRating (Lcom/gravatar/restapi/models/Rating;)V
+}
+
+public final class com/gravatar/restapi/models/UpdateAvatarRequestKt {
+	public static final synthetic fun UpdateAvatarRequest (Lkotlin/jvm/functions/Function1;)Lcom/gravatar/restapi/models/UpdateAvatarRequest;
 }
 
 public final class com/gravatar/restapi/models/VerifiedAccount {

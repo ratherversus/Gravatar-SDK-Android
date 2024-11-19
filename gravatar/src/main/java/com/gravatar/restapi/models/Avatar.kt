@@ -17,8 +17,8 @@ import java.util.Objects
  * @param imageId Unique identifier for the image.
  * @param imageUrl Image URL
  * @param rating Rating associated with the image.
- * @param updatedDate Date and time when the image was last updated.
  * @param altText Alternative text description of the image.
+ * @param updatedDate Date and time when the image was last updated.
  * @param selected Whether the image is currently selected as the provided selected email's avatar.
  */
 
@@ -32,12 +32,12 @@ public class Avatar private constructor(
     // Rating associated with the image.
     @Json(name = "rating")
     public val rating: Avatar.Rating,
-    // Date and time when the image was last updated.
-    @Json(name = "updated_date")
-    public val updatedDate: String,
     // Alternative text description of the image.
     @Json(name = "alt_text")
     public val altText: kotlin.String,
+    // Date and time when the image was last updated.
+    @Json(name = "updated_date")
+    public val updatedDate: String,
     // Whether the image is currently selected as the provided selected email's avatar.
     @Json(name = "selected")
     public val selected: kotlin.Boolean? = null,
@@ -62,17 +62,17 @@ public class Avatar private constructor(
         X("X"),
     }
 
-    override fun toString(): String = "Avatar(imageId=$imageId, imageUrl=$imageUrl, rating=$rating, updatedDate=$updatedDate, altText=$altText, selected=$selected)"
+    override fun toString(): String = "Avatar(imageId=$imageId, imageUrl=$imageUrl, rating=$rating, altText=$altText, updatedDate=$updatedDate, selected=$selected)"
 
     override fun equals(other: Any?): Boolean = other is Avatar &&
         imageId == other.imageId &&
         imageUrl == other.imageUrl &&
         rating == other.rating &&
-        updatedDate == other.updatedDate &&
         altText == other.altText &&
+        updatedDate == other.updatedDate &&
         selected == other.selected
 
-    override fun hashCode(): Int = Objects.hash(imageId, imageUrl, rating, updatedDate, altText, selected)
+    override fun hashCode(): Int = Objects.hash(imageId, imageUrl, rating, altText, updatedDate, selected)
 
     public class Builder {
         // Unique identifier for the image.
@@ -87,13 +87,13 @@ public class Avatar private constructor(
         @set:JvmSynthetic // Hide 'void' setter from Java
         public var rating: Avatar.Rating? = null
 
-        // Date and time when the image was last updated.
-        @set:JvmSynthetic // Hide 'void' setter from Java
-        public var updatedDate: String? = null
-
         // Alternative text description of the image.
         @set:JvmSynthetic // Hide 'void' setter from Java
         public var altText: kotlin.String? = null
+
+        // Date and time when the image was last updated.
+        @set:JvmSynthetic // Hide 'void' setter from Java
+        public var updatedDate: String? = null
 
         // Whether the image is currently selected as the provided selected email's avatar.
         @set:JvmSynthetic // Hide 'void' setter from Java
@@ -105,13 +105,13 @@ public class Avatar private constructor(
 
         public fun setRating(rating: Avatar.Rating?): Builder = apply { this.rating = rating }
 
-        public fun setUpdatedDate(updatedDate: String?): Builder = apply { this.updatedDate = updatedDate }
-
         public fun setAltText(altText: kotlin.String?): Builder = apply { this.altText = altText }
+
+        public fun setUpdatedDate(updatedDate: String?): Builder = apply { this.updatedDate = updatedDate }
 
         public fun setSelected(selected: kotlin.Boolean?): Builder = apply { this.selected = selected }
 
-        public fun build(): Avatar = Avatar(imageId!!, imageUrl!!, rating!!, updatedDate!!, altText!!, selected)
+        public fun build(): Avatar = Avatar(imageId!!, imageUrl!!, rating!!, altText!!, updatedDate!!, selected)
     }
 }
 

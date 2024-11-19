@@ -9,17 +9,36 @@ package com.gravatar.restapi.apis
 
 import com.gravatar.restapi.models.Avatar
 import com.gravatar.restapi.models.SetEmailAvatarRequest
+import com.gravatar.restapi.models.UpdateAvatarRequest
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 internal interface AvatarsApi {
+    /**
+     * Delete avatar
+     * Deletes a specific avatar for the authenticated user.
+     * Responses:
+     *  - 204: Avatar deleted successfully
+     *  - 401: Not Authorized
+     *  - 403: Insufficient Scope
+     *
+     * @param imageId The ID of the avatar to delete.
+     * @return [Unit]
+     */
+    @DELETE("me/avatars/{imageId}")
+    suspend fun deleteAvatar(
+        @Path("imageId") imageId: kotlin.String,
+    ): Response<Unit>
+
     /**
      * List avatars
      * Retrieves a list of available avatars for the authenticated user.
@@ -53,6 +72,24 @@ internal interface AvatarsApi {
         @Path("imageId") imageId: kotlin.String,
         @Body setEmailAvatarRequest: SetEmailAvatarRequest,
     ): Response<Unit>
+
+    /**
+     * Update avatar data
+     * Updates the avatar data for a given avatar for the authenticated user.
+     * Responses:
+     *  - 200: Avatar updated successfully
+     *  - 401: Not Authorized
+     *  - 403: Insufficient Scope
+     *
+     * @param imageId The ID of the avatar to update.
+     * @param updateAvatarRequest
+     * @return [Avatar]
+     */
+    @PATCH("me/avatars/{imageId}")
+    suspend fun updateAvatar(
+        @Path("imageId") imageId: kotlin.String,
+        @Body updateAvatarRequest: UpdateAvatarRequest,
+    ): Response<Avatar>
 
     /**
      * Upload new avatar image
