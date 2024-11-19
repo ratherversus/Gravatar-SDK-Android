@@ -242,4 +242,67 @@ class AvatarServiceTest {
 
             assertEquals(ErrorType.Server, (response as GravatarResult.Failure).error)
         }
+
+    @Test
+    fun `given an imageId when deleting avatar then Gravatar service is invoked`() = runTest {
+        val imageId = "imageId"
+        val mockResponse = mockk<Response<Unit>>(relaxed = true) {
+            every { isSuccessful } returns true
+        }
+
+        coEvery { containerRule.gravatarApiMock.deleteAvatar(imageId) } returns mockResponse
+
+        avatarService.deleteAvatar(imageId, oauthToken)
+
+        coVerify(exactly = 1) {
+            containerRule.gravatarApiMock.deleteAvatar(imageId)
+        }
+    }
+
+    @Test
+    fun `given an imageId when deleting avatar and an error occurs then an exception is thrown`() =
+        runTestExpectingGravatarException(ErrorType.Server, HttpException::class.java) {
+            val imageId = "imageId"
+            val mockResponse = mockk<Response<Unit>>(relaxed = true) {
+                every { isSuccessful } returns false
+                every { code() } returns 500
+            }
+
+            coEvery { containerRule.gravatarApiMock.deleteAvatar(imageId) } returns mockResponse
+
+            avatarService.deleteAvatar(imageId, oauthToken)
+        }
+
+    @Test
+    fun `given an imageId when deleteAvatarCatching then Gravatar service is invoked`() = runTest {
+        val imageId = "imageId"
+        val mockResponse = mockk<Response<Unit>>(relaxed = true) {
+            every { isSuccessful } returns true
+        }
+
+        coEvery { containerRule.gravatarApiMock.deleteAvatar(imageId) } returns mockResponse
+
+        val response = avatarService.deleteAvatarCatching(imageId, oauthToken)
+
+        coVerify(exactly = 1) {
+            containerRule.gravatarApiMock.deleteAvatar(imageId)
+        }
+
+        assertEquals(Unit, (response as GravatarResult.Success).value)
+    }
+
+    @Test
+    fun `given an imageId when deleteAvatarCatching and an error occurs then a Result Failure is returned`() = runTest {
+        val imageId = "imageId"
+        val mockResponse = mockk<Response<Unit>>(relaxed = true) {
+            every { isSuccessful } returns false
+            every { code() } returns 500
+        }
+
+        coEvery { containerRule.gravatarApiMock.deleteAvatar(imageId) } returns mockResponse
+
+        val response = avatarService.deleteAvatarCatching(imageId, oauthToken)
+
+        assertEquals(ErrorType.Server, (response as GravatarResult.Failure).error)
+    }
 }
