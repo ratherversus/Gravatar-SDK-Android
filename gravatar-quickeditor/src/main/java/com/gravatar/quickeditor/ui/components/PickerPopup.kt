@@ -109,6 +109,7 @@ private fun PickerPopup(
                                     iconRes = item.iconRes,
                                     contentDescription = stringResource(item.contentDescription),
                                     shape = popupButtonShape(index, popupItems.size, cornerRadius),
+                                    color = item.color,
                                     onClick = item.onClick,
                                 )
                                 if (index < popupItems.size - 1) {
@@ -143,6 +144,7 @@ internal data class PickerPopupItem(
     @StringRes val text: Int,
     @DrawableRes val iconRes: Int,
     @StringRes val contentDescription: Int,
+    val color: Color? = null,
     val onClick: () -> Unit,
 )
 

@@ -19,6 +19,7 @@ internal fun LazyAvatarRow(
     avatars: List<AvatarUi>,
     onAvatarSelected: (AvatarUi) -> Unit,
     onAltTextSelected: (AvatarUi) -> Unit,
+    onDeleteSelected: (AvatarUi) -> Unit,
     horizontalArrangement: Arrangement.Horizontal,
     state: LazyListState,
     contentPadding: PaddingValues,
@@ -35,6 +36,7 @@ internal fun LazyAvatarRow(
                 avatar = avatarModel,
                 onAvatarSelected = { onAvatarSelected(avatarModel) },
                 onAltTextSelected = { onAltTextSelected(avatarModel) },
+                onDeleteSelected = { onDeleteSelected(avatarModel) },
                 size = avatarSize,
                 modifier = Modifier.size(avatarSize),
             )
@@ -50,6 +52,7 @@ internal fun Avatar(
     size: Dp,
     onAvatarSelected: (AvatarUi) -> Unit,
     onAltTextSelected: (AvatarUi) -> Unit,
+    onDeleteSelected: (AvatarUi) -> Unit,
     modifier: Modifier,
 ) {
     when (avatar) {
@@ -61,6 +64,7 @@ internal fun Avatar(
                 loadingState = avatar.loadingState,
                 onAvatarClicked = { onAvatarSelected(avatar) },
                 onAltTextClicked = { onAltTextSelected(avatar) },
+                onDeleteClicked = { onDeleteSelected(avatar) },
                 modifier = modifier,
             )
         }
@@ -71,6 +75,7 @@ internal fun Avatar(
             loadingState = avatar.loadingState,
             onAvatarClicked = { onAvatarSelected(avatar) },
             onAltTextClicked = { onAltTextSelected(avatar) },
+            onDeleteClicked = { onDeleteSelected(avatar) },
             modifier = modifier,
         )
     }

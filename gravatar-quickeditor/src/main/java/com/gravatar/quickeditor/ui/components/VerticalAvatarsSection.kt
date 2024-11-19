@@ -41,6 +41,7 @@ internal fun VerticalAvatarsSection(
     state: AvatarsSectionUiState,
     onAvatarSelected: (AvatarUi) -> Unit,
     onAltTextSelected: (AvatarUi) -> Unit,
+    onDeleteSelected: (AvatarUi) -> Unit,
     onChoosePhotoClick: () -> Unit,
     onTakePhotoClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -121,6 +122,7 @@ internal fun VerticalAvatarsSection(
                             avatar = avatarModel,
                             onAvatarSelected = { onAvatarSelected(avatarModel) },
                             onAltTextSelected = { onAltTextSelected(avatarModel) },
+                            onDeleteSelected = { onDeleteSelected(avatarModel) },
                             size = avatarSize,
                             modifier = Modifier,
                         )
@@ -174,6 +176,7 @@ private fun VerticalAvatarSectionPreview() {
             onChoosePhotoClick = { },
             onAvatarSelected = { },
             onAltTextSelected = { },
+            onDeleteSelected = { },
         )
     }
 }
@@ -193,6 +196,7 @@ private fun VerticalAvatarSectionEmptyPreview() {
             onChoosePhotoClick = { },
             onAvatarSelected = { },
             onAltTextSelected = { },
+            onDeleteSelected = { },
         )
     }
 }

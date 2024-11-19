@@ -45,6 +45,7 @@ internal fun SelectableAvatar(
     loadingState: AvatarLoadingState,
     onAvatarClicked: () -> Unit,
     onAltTextClicked: () -> Unit,
+    onDeleteClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val cornerRadius = 8.dp
@@ -96,6 +97,10 @@ internal fun SelectableAvatar(
                 onAltTextClick = {
                     moreOptionsPopupVisible = false
                     onAltTextClicked()
+                },
+                onDeleteClicked = {
+                    moreOptionsPopupVisible = false
+                    onDeleteClicked()
                 },
             )
         }
@@ -185,6 +190,7 @@ private fun SelectableAvatarNotSelectedPreview() {
         loadingState = AvatarLoadingState.None,
         onAvatarClicked = { },
         onAltTextClicked = { },
+        onDeleteClicked = { },
         modifier = Modifier.size(150.dp),
     )
 }
@@ -198,6 +204,7 @@ private fun SelectableAvatarSelectedPreview() {
         loadingState = AvatarLoadingState.None,
         onAvatarClicked = { },
         onAltTextClicked = { },
+        onDeleteClicked = { },
         modifier = Modifier.size(150.dp),
     )
 }
@@ -211,6 +218,7 @@ private fun SelectableAvatarLoadingPreview() {
         loadingState = AvatarLoadingState.Loading,
         onAvatarClicked = { },
         onAltTextClicked = { },
+        onDeleteClicked = { },
         modifier = Modifier.size(150.dp),
     )
 }
@@ -224,6 +232,7 @@ private fun SelectableAvatarFailurePreview() {
         loadingState = AvatarLoadingState.Failure,
         onAvatarClicked = { },
         onAltTextClicked = { },
+        onDeleteClicked = { },
         modifier = Modifier.size(150.dp),
     )
 }

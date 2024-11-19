@@ -21,6 +21,7 @@ internal fun AvatarMoreOptionsPickerPopup(
     anchorBounds: Rect,
     onDismissRequest: () -> Unit,
     onAltTextClick: () -> Unit,
+    onDeleteClicked: () -> Unit,
 ) {
     PickerPopup(
         anchorAlignment = anchorAlignment,
@@ -32,6 +33,13 @@ internal fun AvatarMoreOptionsPickerPopup(
                 iconRes = R.drawable.gravatar_avatar_more_options_alt_text,
                 contentDescription = R.string.gravatar_qe_selectable_avatar_more_options_alt_text_content_description,
                 onClick = onAltTextClick,
+            ),
+            PickerPopupItem(
+                text = R.string.gravatar_qe_selectable_avatar_more_options_delete,
+                iconRes = R.drawable.gravatar_avatar_more_options_delete,
+                contentDescription = R.string.gravatar_qe_selectable_avatar_more_options_delete_content_description,
+                color = MaterialTheme.colorScheme.error,
+                onClick = onDeleteClicked,
             ),
         ),
     )
@@ -51,6 +59,7 @@ private fun AvatarMoreOptionsPickerPopupPreview() {
                 onDismissRequest = {},
                 anchorBounds = Rect(Offset(0f, 300f), Size(1f, 1f)),
                 onAltTextClick = {},
+                onDeleteClicked = {},
             )
         }
     }

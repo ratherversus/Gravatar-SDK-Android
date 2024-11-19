@@ -39,6 +39,7 @@ internal fun HorizontalAvatarsSection(
     state: AvatarsSectionUiState,
     onAvatarSelected: (AvatarUi) -> Unit,
     onAltTextSelected: (AvatarUi) -> Unit,
+    onDeleteSelected: (AvatarUi) -> Unit,
     onChoosePhotoClick: () -> Unit,
     onTakePhotoClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -84,6 +85,7 @@ internal fun HorizontalAvatarsSection(
                         avatars = state.avatars,
                         onAvatarSelected = onAvatarSelected,
                         onAltTextSelected = onAltTextSelected,
+                        onDeleteSelected = onDeleteSelected,
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.padding(vertical = 24.dp),
                         state = listState,
@@ -149,6 +151,7 @@ private fun HorizontalAvatarSectionPreview() {
             onChoosePhotoClick = { },
             onAvatarSelected = { },
             onAltTextSelected = { },
+            onDeleteSelected = { },
         )
     }
 }
@@ -168,6 +171,7 @@ private fun HorizontalAvatarSectionEmptyPreview() {
             onChoosePhotoClick = { },
             onAvatarSelected = { },
             onAltTextSelected = { },
+            onDeleteSelected = { },
         )
     }
 }

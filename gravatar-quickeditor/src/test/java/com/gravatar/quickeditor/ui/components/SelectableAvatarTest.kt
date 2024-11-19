@@ -16,6 +16,7 @@ class SelectableAvatarTest : RoborazziTest() {
             loadingState = AvatarLoadingState.None,
             onAvatarClicked = {},
             onAltTextClicked = {},
+            onDeleteClicked = {},
             modifier = Modifier.size(150.dp),
         )
     }
@@ -28,6 +29,7 @@ class SelectableAvatarTest : RoborazziTest() {
             loadingState = AvatarLoadingState.None,
             onAvatarClicked = {},
             onAltTextClicked = {},
+            onDeleteClicked = {},
             modifier = Modifier.size(150.dp),
         )
     }
@@ -40,6 +42,7 @@ class SelectableAvatarTest : RoborazziTest() {
             loadingState = AvatarLoadingState.Loading,
             onAvatarClicked = {},
             onAltTextClicked = {},
+            onDeleteClicked = {},
             modifier = Modifier.size(150.dp),
         )
     }
@@ -52,6 +55,7 @@ class SelectableAvatarTest : RoborazziTest() {
             loadingState = AvatarLoadingState.Failure,
             onAvatarClicked = {},
             onAltTextClicked = {},
+            onDeleteClicked = {},
             modifier = Modifier.size(150.dp),
         )
     }

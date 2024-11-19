@@ -37,6 +37,7 @@ internal fun AvatarsSection(
     state: AvatarsSectionUiState,
     onAvatarSelected: (AvatarUi) -> Unit,
     onAltTextSelected: (AvatarUi) -> Unit,
+    onDeleteSelected: (AvatarUi) -> Unit,
     onLocalImageSelected: (Uri) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -88,6 +89,7 @@ internal fun AvatarsSection(
                     pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 },
                 onTakePhotoClick = permissionAwareTakePhotoCallback,
+                onDeleteSelected = onDeleteSelected,
             )
         }
 
@@ -97,6 +99,7 @@ internal fun AvatarsSection(
                 modifier = modifier,
                 onAvatarSelected = onAvatarSelected,
                 onAltTextSelected = onAltTextSelected,
+                onDeleteSelected = onDeleteSelected,
                 onTakePhotoClick = permissionAwareTakePhotoCallback,
                 onChoosePhotoClick = {
                     pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -180,6 +183,7 @@ private fun AvatarSectionPreview() {
             ),
             onAvatarSelected = { },
             onAltTextSelected = { },
+            onDeleteSelected = { },
             onLocalImageSelected = { },
         )
     }
@@ -210,6 +214,7 @@ private fun AvatarSectionGridPreview() {
             ),
             onAvatarSelected = { },
             onAltTextSelected = { },
+            onDeleteSelected = { },
             onLocalImageSelected = { },
         )
     }
@@ -228,6 +233,7 @@ private fun AvatarSectionEmptyPreview() {
             ),
             onAvatarSelected = { },
             onAltTextSelected = { },
+            onDeleteSelected = { },
             onLocalImageSelected = { },
         )
     }
