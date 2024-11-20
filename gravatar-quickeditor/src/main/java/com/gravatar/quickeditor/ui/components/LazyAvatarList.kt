@@ -38,7 +38,7 @@ internal fun LazyAvatarRow(
                 onAltTextSelected = { onAltTextSelected(avatarModel) },
                 onDeleteSelected = { onDeleteSelected(avatarModel) },
                 size = avatarSize,
-                modifier = Modifier.size(avatarSize),
+                modifier = Modifier.animateItem().size(avatarSize),
             )
         }
     }
