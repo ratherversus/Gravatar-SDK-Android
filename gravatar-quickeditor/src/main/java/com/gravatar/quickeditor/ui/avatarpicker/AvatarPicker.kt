@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -263,6 +264,7 @@ private fun AvatarPickerAction.handle(
                         actionLabel = context.getString(R.string.gravatar_qe_avatar_picker_error_retry_cta),
                         withDismissAction = true,
                         snackbarType = SnackbarType.Error,
+                        duration = SnackbarDuration.Long,
                     ) == QESnackbarResult.ActionPerformed
                 ) {
                     viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatar))
