@@ -45,6 +45,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gravatar.extensions.defaultProfile
 import com.gravatar.quickeditor.R
 import com.gravatar.quickeditor.data.repository.EmailAvatars
+import com.gravatar.quickeditor.ui.components.AvatarOption
 import com.gravatar.quickeditor.ui.components.AvatarsSection
 import com.gravatar.quickeditor.ui.components.EmailLabel
 import com.gravatar.quickeditor.ui.components.ErrorSection
@@ -188,12 +189,11 @@ internal fun AvatarPicker(uiState: AvatarPickerUiState, onEvent: (AvatarPickerEv
                                 is AvatarUi.Uploaded -> onEvent(AvatarPickerEvent.AvatarSelected(avatarUi.avatar))
                             }
                         },
-                        onAltTextSelected = { /* Future implementation */ },
-                        onDeleteSelected = { avatarUi ->
-                            when (avatarUi) {
-                                is AvatarUi.Uploaded -> onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarUi.avatar))
-                                is AvatarUi.Local -> {
-                                    // Local images are not uploaded yet, so we don't need to delete them
+                        onAvatarOptionClicked = { avatar, avatarOption ->
+                            when (avatarOption) {
+                                AvatarOption.ALT_TEXT -> Unit
+                                AvatarOption.DELETE -> {
+                                    onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatar))
                                 }
                             }
                         },

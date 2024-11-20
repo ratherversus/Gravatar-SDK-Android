@@ -38,8 +38,7 @@ import java.net.URI
 internal fun HorizontalAvatarsSection(
     state: AvatarsSectionUiState,
     onAvatarSelected: (AvatarUi) -> Unit,
-    onAltTextSelected: (AvatarUi) -> Unit,
-    onDeleteSelected: (AvatarUi) -> Unit,
+    onAvatarOptionClicked: (Avatar, AvatarOption) -> Unit,
     onChoosePhotoClick: () -> Unit,
     onTakePhotoClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -84,8 +83,7 @@ internal fun HorizontalAvatarsSection(
                     LazyAvatarRow(
                         avatars = state.avatars,
                         onAvatarSelected = onAvatarSelected,
-                        onAltTextSelected = onAltTextSelected,
-                        onDeleteSelected = onDeleteSelected,
+                        onAvatarOptionClicked = onAvatarOptionClicked,
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.padding(vertical = 24.dp),
                         state = listState,
@@ -150,8 +148,7 @@ private fun HorizontalAvatarSectionPreview() {
             onTakePhotoClick = { },
             onChoosePhotoClick = { },
             onAvatarSelected = { },
-            onAltTextSelected = { },
-            onDeleteSelected = { },
+            onAvatarOptionClicked = { _, _ -> },
         )
     }
 }
@@ -170,8 +167,7 @@ private fun HorizontalAvatarSectionEmptyPreview() {
             onTakePhotoClick = { },
             onChoosePhotoClick = { },
             onAvatarSelected = { },
-            onAltTextSelected = { },
-            onDeleteSelected = { },
+            onAvatarOptionClicked = { _, _ -> },
         )
     }
 }
