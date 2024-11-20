@@ -57,6 +57,7 @@ import com.gravatar.quickeditor.ui.editor.AvatarPickerContentLayout
 import com.gravatar.quickeditor.ui.editor.GravatarQuickEditorParams
 import com.gravatar.quickeditor.ui.editor.bottomsheet.DEFAULT_PAGE_HEIGHT
 import com.gravatar.quickeditor.ui.extensions.QESnackbarHost
+import com.gravatar.quickeditor.ui.extensions.QESnackbarResult
 import com.gravatar.quickeditor.ui.extensions.SnackbarType
 import com.gravatar.quickeditor.ui.extensions.showQESnackbar
 import com.gravatar.restapi.models.Avatar
@@ -100,6 +101,7 @@ internal fun AvatarPicker(
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.actions.collect { action ->
                     action.handle(
+                        viewModel = viewModel,
                         cropperLauncher = cropperLauncher,
                         onAvatarSelected = onAvatarSelected,
                         onSessionExpired = onSessionExpired,
@@ -218,6 +220,7 @@ internal fun AvatarPicker(uiState: AvatarPickerUiState, onEvent: (AvatarPickerEv
 
 @Suppress("LongParameterList")
 private fun AvatarPickerAction.handle(
+    viewModel: AvatarPickerViewModel,
     cropperLauncher: CropperLauncher,
     onAvatarSelected: () -> Unit,
     onSessionExpired: () -> Unit,
@@ -252,6 +255,20 @@ private fun AvatarPickerAction.handle(
         }
 
         AvatarPickerAction.InvokeAuthFailed -> onSessionExpired()
+
+        is AvatarPickerAction.AvatarDeletionFailed -> {
+            scope.launch {
+                if (snackState.showQESnackbar(
+                        message = context.getString(R.string.gravatar_qe_avatar_delete_avatar_error),
+                        actionLabel = context.getString(R.string.gravatar_qe_avatar_picker_error_retry_cta),
+                        withDismissAction = true,
+                        snackbarType = SnackbarType.Error,
+                    ) == QESnackbarResult.ActionPerformed
+                ) {
+                    viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatar))
+                }
+            }
+        }
     }
 }
 
