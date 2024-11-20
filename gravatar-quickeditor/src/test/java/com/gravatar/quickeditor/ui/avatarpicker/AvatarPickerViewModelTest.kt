@@ -762,6 +762,143 @@ class AvatarPickerViewModelTest {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `given selected avatar when delete successful then uiState is updated`() = runTest {
+        val emailAvatarsCopy = emailAvatars.copy(avatars = avatars, selectedAvatarId = avatars.first().imageId)
+        coEvery { avatarRepository.getAvatars(email) } returns GravatarResult.Success(emailAvatarsCopy)
+        coEvery { profileService.retrieveCatching(email) } returns GravatarResult.Success(profile)
+        coEvery { avatarRepository.deleteAvatar(any(), any()) } returns GravatarResult.Success(Unit)
+
+        viewModel = initViewModel()
+
+        advanceUntilIdle()
+
+        viewModel.uiState.test {
+            expectMostRecentItem()
+            val avatarToDelete = avatars.first()
+            viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarToDelete))
+            val avatarPickerUiState = AvatarPickerUiState(
+                email = email,
+                emailAvatars = emailAvatarsCopy.copy(avatars = avatars.minus(avatarToDelete), selectedAvatarId = null),
+                error = null,
+                profile = ComponentState.Loaded(profile),
+                avatarPickerContentLayout = avatarPickerContentLayout,
+                avatarUpdates = 1,
+                scrollToIndex = 0,
+            )
+            assertEquals(
+                avatarPickerUiState,
+                awaitItem(),
+            )
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `given non selected avatar when delete successful then uiState is updated`() = runTest {
+        val emailAvatarsCopy = emailAvatars.copy(avatars = avatars, selectedAvatarId = avatars.first().imageId)
+        coEvery { avatarRepository.getAvatars(email) } returns GravatarResult.Success(emailAvatarsCopy)
+        coEvery { profileService.retrieveCatching(email) } returns GravatarResult.Success(profile)
+        coEvery { avatarRepository.deleteAvatar(any(), any()) } returns GravatarResult.Success(Unit)
+
+        viewModel = initViewModel()
+
+        advanceUntilIdle()
+
+        viewModel.uiState.test {
+            expectMostRecentItem()
+            val avatarToDelete = avatars.last() // Non selected avatar
+            viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarToDelete))
+            val avatarPickerUiState = AvatarPickerUiState(
+                email = email,
+                emailAvatars = emailAvatarsCopy.copy(
+                    avatars = avatars.minus(avatarToDelete),
+                    selectedAvatarId = avatars.first().imageId,
+                ),
+                error = null,
+                profile = ComponentState.Loaded(profile),
+                avatarPickerContentLayout = avatarPickerContentLayout,
+                avatarUpdates = 0,
+                scrollToIndex = 0,
+            )
+            assertEquals(
+                avatarPickerUiState,
+                awaitItem(),
+            )
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `given selected avatar when delete fails then uiState is updated`() = runTest {
+        val emailAvatarsCopy = emailAvatars.copy(avatars = avatars, selectedAvatarId = avatars.first().imageId)
+        coEvery { avatarRepository.getAvatars(email) } returns GravatarResult.Success(emailAvatarsCopy)
+        coEvery { profileService.retrieveCatching(email) } returns GravatarResult.Success(profile)
+        coEvery { avatarRepository.deleteAvatar(any(), any()) } returns GravatarResult.Failure(QuickEditorError.Unknown)
+
+        viewModel = initViewModel()
+
+        advanceUntilIdle()
+
+        viewModel.uiState.test {
+            expectMostRecentItem()
+            val avatarToDelete = avatars.first()
+            viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarToDelete))
+
+            awaitItem()
+
+            val avatarPickerUiState = AvatarPickerUiState(
+                email = email,
+                emailAvatars = emailAvatarsCopy.copy(avatars = avatars, selectedAvatarId = avatars.first().imageId),
+                error = null,
+                profile = ComponentState.Loaded(profile),
+                avatarPickerContentLayout = avatarPickerContentLayout,
+                avatarUpdates = 2,
+                scrollToIndex = 0,
+            )
+            assertEquals(
+                avatarPickerUiState,
+                awaitItem(),
+            )
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `given non selected avatar when delete fails then uiState is updated`() = runTest {
+        val emailAvatarsCopy = emailAvatars.copy(avatars = avatars, selectedAvatarId = avatars.first().imageId)
+        coEvery { avatarRepository.getAvatars(email) } returns GravatarResult.Success(emailAvatarsCopy)
+        coEvery { profileService.retrieveCatching(email) } returns GravatarResult.Success(profile)
+        coEvery { avatarRepository.deleteAvatar(any(), any()) } returns GravatarResult.Failure(QuickEditorError.Unknown)
+
+        viewModel = initViewModel()
+
+        advanceUntilIdle()
+
+        viewModel.uiState.test {
+            expectMostRecentItem()
+            val avatarToDelete = avatars.last() // Non selected avatar
+            viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarToDelete))
+
+            awaitItem()
+
+            val avatarPickerUiState = AvatarPickerUiState(
+                email = email,
+                emailAvatars = emailAvatarsCopy.copy(avatars = avatars, selectedAvatarId = avatars.first().imageId),
+                error = null,
+                profile = ComponentState.Loaded(profile),
+                avatarPickerContentLayout = avatarPickerContentLayout,
+                avatarUpdates = 0,
+                scrollToIndex = 0,
+            )
+            assertEquals(
+                avatarPickerUiState,
+                awaitItem(),
+            )
+        }
+    }
+
     private fun initViewModel(handleExpiredSession: Boolean = true) = AvatarPickerViewModel(
         email,
         handleExpiredSession,

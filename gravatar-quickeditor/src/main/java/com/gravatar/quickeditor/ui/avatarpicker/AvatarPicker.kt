@@ -189,7 +189,14 @@ internal fun AvatarPicker(uiState: AvatarPickerUiState, onEvent: (AvatarPickerEv
                             }
                         },
                         onAltTextSelected = { /* Future implementation */ },
-                        onDeleteSelected = { /* Future implementation */ },
+                        onDeleteSelected = { avatarUi ->
+                            when (avatarUi) {
+                                is AvatarUi.Uploaded -> onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarUi.avatar))
+                                is AvatarUi.Local -> {
+                                    // Local images are not uploaded yet, so we don't need to delete them
+                                }
+                            }
+                        },
                         onLocalImageSelected = { onEvent(AvatarPickerEvent.LocalImageSelected(it)) },
                         modifier = sectionModifier
                             .padding(horizontal = 16.dp)
