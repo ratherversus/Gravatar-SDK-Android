@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -127,7 +128,9 @@ internal fun VerticalAvatarsSection(
                 }
             }
             if (popupVisible) {
+                val isGridButton = state.avatars.isNotEmpty()
                 MediaPickerPopup(
+                    anchorAlignment = if (isGridButton) Alignment.Start else Alignment.CenterHorizontally,
                     onDismissRequest = { popupVisible = false },
                     anchorBounds = popupAnchorBounds,
                     onChoosePhotoClick = {

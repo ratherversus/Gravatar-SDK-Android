@@ -38,8 +38,14 @@ import com.composables.core.Scrim
 import com.composables.core.rememberDialogState
 
 @Composable
-internal fun PickerPopup(anchorBounds: Rect, onDismissRequest: () -> Unit, popupItems: List<PickerPopupItem>) {
+internal fun PickerPopup(
+    anchorAlignment: Alignment.Horizontal,
+    anchorBounds: Rect,
+    onDismissRequest: () -> Unit,
+    popupItems: List<PickerPopupItem>,
+) {
     PickerPopup(
+        anchorAlignment = anchorAlignment,
         anchorBounds = anchorBounds,
         onDismissRequest = onDismissRequest,
         popupItems = popupItems,
@@ -54,6 +60,7 @@ internal fun PickerPopup(anchorBounds: Rect, onDismissRequest: () -> Unit, popup
 
 @Composable
 private fun PickerPopup(
+    anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
     onDismissRequest: () -> Unit,
     popupItems: List<PickerPopupItem>,
@@ -73,7 +80,7 @@ private fun PickerPopup(
                 alignment = Alignment.TopStart,
                 onDismissRequest = onDismissRequest,
                 offset = IntOffset(
-                    (anchorBounds.left.toInt() + anchorBounds.width.toInt() / 2) - (popupSize.width / 2),
+                    calculatePopupXOffset(anchorAlignment, anchorBounds, popupSize),
                     (anchorBounds.top - popupSize.height - 10.dp.dpToPx()).toInt(),
                 ),
                 properties = PopupProperties(focusable = true),
@@ -137,3 +144,18 @@ internal data class PickerPopupItem(
     val color: Color? = null,
     val onClick: () -> Unit,
 )
+
+private fun calculatePopupXOffset(anchorAlignment: Alignment.Horizontal, anchorBounds: Rect, popupSize: IntSize): Int {
+    return when (anchorAlignment) {
+        Alignment.Start -> {
+            anchorBounds.left.toInt()
+        }
+        Alignment.End -> {
+            anchorBounds.right.toInt() - popupSize.width
+        }
+        // Default to Alignment.CenterHorizontally
+        else -> {
+            (anchorBounds.left.toInt() + anchorBounds.width.toInt() / 2) - (popupSize.width / 2)
+        }
+    }
+}
