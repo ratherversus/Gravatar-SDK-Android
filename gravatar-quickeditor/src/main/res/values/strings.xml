@@ -19,6 +19,7 @@
     <string name="gravatar_qe_photo_library_icon_description">Photo library</string>
     <string name="gravatar_qe_capture_photo_icon_description">Capture Photo</string>
     <string name="gravatar_qe_avatar_selection_error">Ooops, there was an error selecting the avatar.</string>
+    <string name="gravatar_qe_avatar_delete_avatar_error">Error deleting the image.</string>
     <string name="gravatar_qe_avatar_picker_server_error_title">Ooops</string>
     <string name="gravatar_qe_avatar_picker_server_error_message">Something went wrong and we couldn\'t connect to Gravatar servers.</string>
     <string name="gravatar_qe_avatar_picker_unknown_error_message">Something went terribly wrong.</string>

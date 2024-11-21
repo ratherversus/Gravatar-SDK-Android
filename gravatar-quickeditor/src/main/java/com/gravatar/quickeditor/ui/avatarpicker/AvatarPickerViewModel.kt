@@ -279,6 +279,7 @@ internal class AvatarPickerViewModel(
                 }
 
                 is GravatarResult.Failure -> {
+                    _actions.send(AvatarPickerAction.AvatarDeletionFailed(avatar))
                     _uiState.update { currentState ->
                         currentState.copy(
                             emailAvatars = currentState.emailAvatars?.copy(

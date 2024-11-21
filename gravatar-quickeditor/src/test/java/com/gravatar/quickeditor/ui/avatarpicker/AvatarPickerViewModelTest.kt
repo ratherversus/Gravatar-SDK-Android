@@ -861,6 +861,9 @@ class AvatarPickerViewModelTest {
                 avatarPickerUiState,
                 awaitItem(),
             )
+            viewModel.actions.test {
+                assertEquals(AvatarPickerAction.AvatarDeletionFailed(avatarToDelete), awaitItem())
+            }
         }
     }
 
@@ -896,6 +899,9 @@ class AvatarPickerViewModelTest {
                 avatarPickerUiState,
                 awaitItem(),
             )
+            viewModel.actions.test {
+                assertEquals(AvatarPickerAction.AvatarDeletionFailed(avatarToDelete), awaitItem())
+            }
         }
     }
 
