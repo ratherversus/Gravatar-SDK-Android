@@ -177,7 +177,7 @@ internal fun AvatarPicker(uiState: AvatarPickerUiState, onEvent: (AvatarPickerEv
         }
     }
 
-    var confirmAvatarDeletion by remember { mutableStateOf<Avatar?>(null) }
+    var confirmAvatarDeletion by remember { mutableStateOf<String?>(null) }
     Surface(
         Modifier
             .fillMaxWidth()
@@ -239,7 +239,7 @@ internal fun AvatarPicker(uiState: AvatarPickerUiState, onEvent: (AvatarPickerEv
                             when (avatarOption) {
                                 AvatarOption.ALT_TEXT -> Unit
                                 AvatarOption.DELETE -> {
-                                    confirmAvatarDeletion = avatar
+                                    confirmAvatarDeletion = avatar.imageId
                                 }
 
                                 AvatarOption.DOWNLOAD_IMAGE -> {
@@ -354,7 +354,7 @@ private fun AvatarPickerAction.handle(
                         duration = SnackbarDuration.Long,
                     ) == QESnackbarResult.ActionPerformed
                 ) {
-                    viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatar))
+                    viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarId))
                 }
             }
         }
