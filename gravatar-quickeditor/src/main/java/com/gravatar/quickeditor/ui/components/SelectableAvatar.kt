@@ -90,7 +90,6 @@ internal fun SelectableAvatar(
 
         if (moreOptionsPopupVisible) {
             AvatarMoreOptionsPickerPopup(
-                anchorAlignment = Alignment.CenterHorizontally,
                 anchorBounds = popupAnchorBounds,
                 onDismissRequest = { moreOptionsPopupVisible = false },
                 onAvatarOptionClicked = { avatarOption ->
