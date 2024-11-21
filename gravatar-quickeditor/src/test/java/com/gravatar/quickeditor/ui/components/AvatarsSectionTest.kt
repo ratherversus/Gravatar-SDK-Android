@@ -22,7 +22,7 @@ class AvatarsSectionTest : RoborazziTest() {
             ),
             onLocalImageSelected = { },
             onAvatarSelected = { },
-            onAltTextSelected = { },
+            onAvatarOptionClicked = { _, _ -> },
         )
     }
 
@@ -38,7 +38,7 @@ class AvatarsSectionTest : RoborazziTest() {
             ),
             onLocalImageSelected = { },
             onAvatarSelected = { },
-            onAltTextSelected = { },
+            onAvatarOptionClicked = { _, _ -> },
         )
     }
 
@@ -53,7 +53,7 @@ class AvatarsSectionTest : RoborazziTest() {
             ),
             onLocalImageSelected = { },
             onAvatarSelected = { },
-            onAltTextSelected = { },
+            onAvatarOptionClicked = { _, _ -> },
         )
     }
 
@@ -68,7 +68,7 @@ class AvatarsSectionTest : RoborazziTest() {
             ),
             onLocalImageSelected = { },
             onAvatarSelected = { },
-            onAltTextSelected = { },
+            onAvatarOptionClicked = { _, _ -> },
         )
     }
 
@@ -83,7 +83,7 @@ class AvatarsSectionTest : RoborazziTest() {
             ),
             onLocalImageSelected = { },
             onAvatarSelected = { },
-            onAltTextSelected = { },
+            onAvatarOptionClicked = { _, _ -> },
         )
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,6 +30,7 @@ internal fun PopupButton(
     contentDescription: String,
     onClick: () -> Unit,
     shape: Shape,
+    color: Color? = null,
     modifier: Modifier = Modifier,
 ) {
     TextButton(
@@ -45,14 +47,14 @@ internal fun PopupButton(
                 text = text,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = color ?: MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 modifier = Modifier.weight(1f),
             )
             Icon(
                 painter = painterResource(id = iconRes),
                 contentDescription = contentDescription,
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = color ?: MaterialTheme.colorScheme.onSurface,
             )
         }
     }

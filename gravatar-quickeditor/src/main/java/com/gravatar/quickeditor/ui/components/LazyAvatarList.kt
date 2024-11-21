@@ -12,13 +12,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.gravatar.quickeditor.ui.avatarpicker.AvatarUi
+import com.gravatar.restapi.models.Avatar
 import java.net.URL
 
 @Composable
 internal fun LazyAvatarRow(
     avatars: List<AvatarUi>,
     onAvatarSelected: (AvatarUi) -> Unit,
-    onAltTextSelected: (AvatarUi) -> Unit,
+    onAvatarOptionClicked: (Avatar, AvatarOption) -> Unit,
     horizontalArrangement: Arrangement.Horizontal,
     state: LazyListState,
     contentPadding: PaddingValues,
@@ -34,9 +35,11 @@ internal fun LazyAvatarRow(
             Avatar(
                 avatar = avatarModel,
                 onAvatarSelected = { onAvatarSelected(avatarModel) },
-                onAltTextSelected = { onAltTextSelected(avatarModel) },
+                onAvatarOptionClicked = { avatar, option -> onAvatarOptionClicked(avatar, option) },
                 size = avatarSize,
-                modifier = Modifier.size(avatarSize),
+                modifier = Modifier
+                    .animateItem()
+                    .size(avatarSize),
             )
         }
     }
@@ -48,8 +51,8 @@ internal val avatarSize = 96.dp
 internal fun Avatar(
     avatar: AvatarUi,
     size: Dp,
-    onAvatarSelected: (AvatarUi) -> Unit,
-    onAltTextSelected: (AvatarUi) -> Unit,
+    onAvatarSelected: () -> Unit,
+    onAvatarOptionClicked: (Avatar, AvatarOption) -> Unit,
     modifier: Modifier,
 ) {
     when (avatar) {
@@ -59,8 +62,8 @@ internal fun Avatar(
                 imageUrl = avatar.imageUrlWithSize(sizePx),
                 isSelected = avatar.isSelected,
                 loadingState = avatar.loadingState,
-                onAvatarClicked = { onAvatarSelected(avatar) },
-                onAltTextClicked = { onAltTextSelected(avatar) },
+                onAvatarClicked = { onAvatarSelected() },
+                onAvatarOptionClicked = { onAvatarOptionClicked(avatar.avatar, it) },
                 modifier = modifier,
             )
         }
@@ -69,8 +72,7 @@ internal fun Avatar(
             imageUrl = avatar.uri.toString(),
             isSelected = false,
             loadingState = avatar.loadingState,
-            onAvatarClicked = { onAvatarSelected(avatar) },
-            onAltTextClicked = { onAltTextSelected(avatar) },
+            onAvatarClicked = { onAvatarSelected() },
             modifier = modifier,
         )
     }

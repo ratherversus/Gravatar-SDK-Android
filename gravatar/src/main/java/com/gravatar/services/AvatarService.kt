@@ -170,4 +170,43 @@ public class AvatarService(private val okHttpClient: OkHttpClient? = null) {
     ): GravatarResult<Unit, ErrorType> = runCatchingRequest {
         setAvatar(hash, avatarId, oauthToken)
     }
+
+    /**
+     * Deletes the avatar with the given ID.
+     *
+     * @param imageId The ID of the avatar to delete
+     * @param oauthToken The OAuth token to use for authentication
+     */
+    public suspend fun deleteAvatar(imageId: String, oauthToken: String): Unit = runThrowingExceptionRequest {
+        withContext(GravatarSdkDI.dispatcherIO) {
+            val service = GravatarSdkDI.getGravatarV3Service(okHttpClient, oauthToken)
+
+            val response = service.deleteAvatar(imageId)
+
+            if (response.isSuccessful) {
+                Unit
+            } else {
+                // Log the response body for debugging purposes if the response is not successful
+                Logger.w(
+                    LOG_TAG,
+                    "Network call unsuccessful trying to delete Gravatar avatar: $response.body",
+                )
+                throw HttpException(response)
+            }
+        }
+    }
+
+    /**
+     * Deletes the avatar with the given ID.
+     * This method will catch any exception that occurs during
+     * the execution and return it as a [GravatarResult.Failure].
+     *
+     * @param imageId The ID of the avatar to delete
+     * @param oauthToken The OAuth token to use for authentication
+     * @return The result of the operation
+     */
+    public suspend fun deleteAvatarCatching(imageId: String, oauthToken: String): GravatarResult<Unit, ErrorType> =
+        runCatchingRequest {
+            deleteAvatar(imageId, oauthToken)
+        }
 }

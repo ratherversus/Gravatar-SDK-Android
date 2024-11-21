@@ -19,4 +19,6 @@ internal sealed class AvatarPickerEvent {
     data object FailedAvatarDialogDismissed : AvatarPickerEvent()
 
     data object HandleAuthFailureTapped : AvatarPickerEvent()
+
+    data class AvatarDeleteSelected(val avatar: Avatar) : AvatarPickerEvent()
 }

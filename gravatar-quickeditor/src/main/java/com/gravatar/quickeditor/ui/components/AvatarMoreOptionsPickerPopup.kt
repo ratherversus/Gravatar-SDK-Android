@@ -20,7 +20,7 @@ internal fun AvatarMoreOptionsPickerPopup(
     anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
     onDismissRequest: () -> Unit,
-    onAltTextClick: () -> Unit,
+    onAvatarOptionClicked: (AvatarOption) -> Unit,
 ) {
     PickerPopup(
         anchorAlignment = anchorAlignment,
@@ -31,10 +31,26 @@ internal fun AvatarMoreOptionsPickerPopup(
                 text = R.string.gravatar_qe_selectable_avatar_more_options_alt_text,
                 iconRes = R.drawable.gravatar_avatar_more_options_alt_text,
                 contentDescription = R.string.gravatar_qe_selectable_avatar_more_options_alt_text_content_description,
-                onClick = onAltTextClick,
+                onClick = {
+                    onAvatarOptionClicked(AvatarOption.ALT_TEXT)
+                },
+            ),
+            PickerPopupItem(
+                text = R.string.gravatar_qe_selectable_avatar_more_options_delete,
+                iconRes = R.drawable.gravatar_avatar_more_options_delete,
+                contentDescription = R.string.gravatar_qe_selectable_avatar_more_options_delete_content_description,
+                color = MaterialTheme.colorScheme.error,
+                onClick = {
+                    onAvatarOptionClicked(AvatarOption.DELETE)
+                },
             ),
         ),
     )
+}
+
+internal enum class AvatarOption {
+    ALT_TEXT,
+    DELETE,
 }
 
 @Preview
@@ -50,7 +66,7 @@ private fun AvatarMoreOptionsPickerPopupPreview() {
                 anchorAlignment = Alignment.Start,
                 onDismissRequest = {},
                 anchorBounds = Rect(Offset(0f, 300f), Size(1f, 1f)),
-                onAltTextClick = {},
+                onAvatarOptionClicked = {},
             )
         }
     }

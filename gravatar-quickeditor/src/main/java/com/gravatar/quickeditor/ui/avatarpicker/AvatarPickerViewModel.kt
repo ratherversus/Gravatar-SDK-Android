@@ -63,6 +63,7 @@ internal class AvatarPickerViewModel(
             AvatarPickerEvent.FailedAvatarDialogDismissed -> dismissFailedUploadDialog()
             is AvatarPickerEvent.FailedAvatarTapped -> showFailedUploadDialog(event.uri)
             is AvatarPickerEvent.FailedAvatarDismissed -> removedFailedUpload(event.uri)
+            is AvatarPickerEvent.AvatarDeleteSelected -> deleteAvatar(event.avatar)
         }
     }
 
@@ -246,6 +247,57 @@ internal class AvatarPickerViewModel(
             is GravatarResult.Failure -> {
                 _uiState.update { currentState ->
                     currentState.copy(emailAvatars = null, isLoading = false, error = result.error.asSectionError)
+                }
+            }
+        }
+    }
+
+    private fun deleteAvatar(avatar: Avatar) {
+        viewModelScope.launch {
+            val avatarIndex = _uiState.value.emailAvatars?.avatars?.indexOfFirstOrNull { it.imageId == avatar.imageId }
+            val isSelectedAvatar = avatar.imageId == _uiState.value.emailAvatars?.selectedAvatarId
+            _uiState.update { currentState ->
+                currentState.copy(
+                    emailAvatars = currentState.emailAvatars?.copy(
+                        avatars = currentState.emailAvatars.avatars.filter { it.imageId != avatar.imageId },
+                        selectedAvatarId = if (currentState.emailAvatars.selectedAvatarId == avatar.imageId) {
+                            null
+                        } else {
+                            currentState.emailAvatars.selectedAvatarId
+                        },
+                    ),
+                    avatarUpdates = if (isSelectedAvatar) {
+                        currentState.avatarUpdates.inc()
+                    } else {
+                        currentState.avatarUpdates
+                    },
+                )
+            }
+            when (avatarRepository.deleteAvatar(email, avatar.imageId)) {
+                is GravatarResult.Success -> {
+                    // As we've already updated the UI, we don't need to do anything here
+                }
+
+                is GravatarResult.Failure -> {
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            emailAvatars = currentState.emailAvatars?.copy(
+                                avatars = currentState.emailAvatars.avatars.toMutableList().apply {
+                                    add(avatarIndex ?: 0, avatar)
+                                },
+                                selectedAvatarId = if (isSelectedAvatar) {
+                                    avatar.imageId
+                                } else {
+                                    currentState.emailAvatars.selectedAvatarId
+                                },
+                            ),
+                            avatarUpdates = if (isSelectedAvatar) {
+                                currentState.avatarUpdates.inc()
+                            } else {
+                                currentState.avatarUpdates
+                            },
+                        )
+                    }
                 }
             }
         }

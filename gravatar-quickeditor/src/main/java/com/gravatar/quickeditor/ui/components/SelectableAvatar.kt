@@ -44,7 +44,7 @@ internal fun SelectableAvatar(
     isSelected: Boolean,
     loadingState: AvatarLoadingState,
     onAvatarClicked: () -> Unit,
-    onAltTextClicked: () -> Unit,
+    onAvatarOptionClicked: ((AvatarOption) -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
     val cornerRadius = 8.dp
@@ -93,9 +93,9 @@ internal fun SelectableAvatar(
                 anchorAlignment = Alignment.CenterHorizontally,
                 anchorBounds = popupAnchorBounds,
                 onDismissRequest = { moreOptionsPopupVisible = false },
-                onAltTextClick = {
+                onAvatarOptionClicked = { avatarOption ->
                     moreOptionsPopupVisible = false
-                    onAltTextClicked()
+                    onAvatarOptionClicked?.let { it(avatarOption) }
                 },
             )
         }
@@ -184,7 +184,7 @@ private fun SelectableAvatarNotSelectedPreview() {
         isSelected = false,
         loadingState = AvatarLoadingState.None,
         onAvatarClicked = { },
-        onAltTextClicked = { },
+        onAvatarOptionClicked = { },
         modifier = Modifier.size(150.dp),
     )
 }
@@ -197,7 +197,7 @@ private fun SelectableAvatarSelectedPreview() {
         isSelected = true,
         loadingState = AvatarLoadingState.None,
         onAvatarClicked = { },
-        onAltTextClicked = { },
+        onAvatarOptionClicked = { },
         modifier = Modifier.size(150.dp),
     )
 }
@@ -210,7 +210,7 @@ private fun SelectableAvatarLoadingPreview() {
         isSelected = false,
         loadingState = AvatarLoadingState.Loading,
         onAvatarClicked = { },
-        onAltTextClicked = { },
+        onAvatarOptionClicked = { },
         modifier = Modifier.size(150.dp),
     )
 }
@@ -223,7 +223,7 @@ private fun SelectableAvatarFailurePreview() {
         isSelected = false,
         loadingState = AvatarLoadingState.Failure,
         onAvatarClicked = { },
-        onAltTextClicked = { },
+        onAvatarOptionClicked = { },
         modifier = Modifier.size(150.dp),
     )
 }
