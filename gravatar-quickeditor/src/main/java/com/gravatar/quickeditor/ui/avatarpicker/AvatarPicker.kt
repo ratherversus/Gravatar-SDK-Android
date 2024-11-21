@@ -177,7 +177,7 @@ internal fun AvatarPicker(uiState: AvatarPickerUiState, onEvent: (AvatarPickerEv
         }
     }
 
-    var confirmAvatarDeletion by remember { mutableStateOf<String?>(null) }
+    var confirmAvatarDeletion by rememberSaveable { mutableStateOf<String?>(null) }
     Surface(
         Modifier
             .fillMaxWidth()
