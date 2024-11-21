@@ -43,6 +43,7 @@ internal fun SelectableAvatar(
     imageUrl: String,
     isSelected: Boolean,
     loadingState: AvatarLoadingState,
+    parentBounds: Rect? = null,
     onAvatarClicked: () -> Unit,
     onAvatarOptionClicked: ((AvatarOption) -> Unit)? = null,
     modifier: Modifier = Modifier,
@@ -90,8 +91,9 @@ internal fun SelectableAvatar(
 
         if (moreOptionsPopupVisible) {
             AvatarMoreOptionsPickerPopup(
-                anchorAlignment = Alignment.CenterHorizontally,
+                anchorAlignment = Alignment.Start,
                 anchorBounds = popupAnchorBounds,
+                maxBounds = parentBounds,
                 onDismissRequest = { moreOptionsPopupVisible = false },
                 onAvatarOptionClicked = { avatarOption ->
                     moreOptionsPopupVisible = false

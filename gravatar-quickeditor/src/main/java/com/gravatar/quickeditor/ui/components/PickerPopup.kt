@@ -41,12 +41,14 @@ import com.composables.core.rememberDialogState
 internal fun PickerPopup(
     anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
+    maxBounds: Rect? = null,
     onDismissRequest: () -> Unit,
     popupItems: List<PickerPopupItem>,
 ) {
     PickerPopup(
         anchorAlignment = anchorAlignment,
         anchorBounds = anchorBounds,
+        maxBounds = maxBounds,
         onDismissRequest = onDismissRequest,
         popupItems = popupItems,
         state = remember {
@@ -62,6 +64,7 @@ internal fun PickerPopup(
 private fun PickerPopup(
     anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
+    maxBounds: Rect? = null,
     onDismissRequest: () -> Unit,
     popupItems: List<PickerPopupItem>,
     state: MutableTransitionState<Boolean>,
@@ -80,7 +83,7 @@ private fun PickerPopup(
                 alignment = Alignment.TopStart,
                 onDismissRequest = onDismissRequest,
                 offset = IntOffset(
-                    calculatePopupXOffset(anchorAlignment, anchorBounds, popupSize),
+                    calculatePopupXOffset(anchorAlignment, anchorBounds, maxBounds, popupSize),
                     (anchorBounds.top - popupSize.height - 10.dp.dpToPx()).toInt(),
                 ),
                 properties = PopupProperties(focusable = true),
@@ -145,17 +148,19 @@ internal data class PickerPopupItem(
     val onClick: () -> Unit,
 )
 
-private fun calculatePopupXOffset(anchorAlignment: Alignment.Horizontal, anchorBounds: Rect, popupSize: IntSize): Int {
-    return when (anchorAlignment) {
-        Alignment.Start -> {
-            anchorBounds.left.toInt()
-        }
-        Alignment.End -> {
-            anchorBounds.right.toInt() - popupSize.width
-        }
-        // Default to Alignment.CenterHorizontally
-        else -> {
-            (anchorBounds.left.toInt() + anchorBounds.width.toInt() / 2) - (popupSize.width / 2)
-        }
+private fun calculatePopupXOffset(
+    anchorAlignment: Alignment.Horizontal,
+    anchorBounds: Rect,
+    maxBounds: Rect? = null,
+    popupSize: IntSize,
+): Int {
+    val offset = when (anchorAlignment) {
+        Alignment.Start -> anchorBounds.left.toInt()
+        Alignment.End -> (anchorBounds.right - popupSize.width).toInt()
+        else -> (anchorBounds.left.toInt() + anchorBounds.width.toInt() / 2) - (popupSize.width / 2)
     }
+
+    return maxBounds?.let { bounds ->
+        offset.coerceIn(bounds.left.toInt(), (bounds.right - popupSize.width).toInt())
+    } ?: offset
 }
