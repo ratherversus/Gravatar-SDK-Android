@@ -1,7 +1,11 @@
 package com.gravatar.quickeditor.ui.avatarpicker
 
+import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.util.DisplayMetrics
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -29,6 +33,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,9 +53,11 @@ import com.gravatar.quickeditor.R
 import com.gravatar.quickeditor.data.repository.EmailAvatars
 import com.gravatar.quickeditor.ui.components.AvatarOption
 import com.gravatar.quickeditor.ui.components.AvatarsSection
+import com.gravatar.quickeditor.ui.components.DownloadManagerDisabledAlertDialog
 import com.gravatar.quickeditor.ui.components.EmailLabel
 import com.gravatar.quickeditor.ui.components.ErrorSection
 import com.gravatar.quickeditor.ui.components.FailedAvatarUploadAlertDialog
+import com.gravatar.quickeditor.ui.components.PermissionRationaleDialog
 import com.gravatar.quickeditor.ui.components.ProfileCard
 import com.gravatar.quickeditor.ui.cropperlauncher.CropperLauncher
 import com.gravatar.quickeditor.ui.cropperlauncher.UCropCropperLauncher
@@ -61,6 +68,8 @@ import com.gravatar.quickeditor.ui.extensions.QESnackbarHost
 import com.gravatar.quickeditor.ui.extensions.QESnackbarResult
 import com.gravatar.quickeditor.ui.extensions.SnackbarType
 import com.gravatar.quickeditor.ui.extensions.showQESnackbar
+import com.gravatar.quickeditor.ui.openAppPermissionSettings
+import com.gravatar.quickeditor.ui.withPermission
 import com.gravatar.restapi.models.Avatar
 import com.gravatar.types.Email
 import com.gravatar.ui.GravatarTheme
@@ -135,6 +144,38 @@ internal fun AvatarPicker(
 internal fun AvatarPicker(uiState: AvatarPickerUiState, onEvent: (AvatarPickerEvent) -> Unit) {
     val context = LocalContext.current
     var loadingSectionHeight by remember { mutableStateOf(DEFAULT_PAGE_HEIGHT) }
+    var storagePermissionRationaleDialogVisible by rememberSaveable { mutableStateOf(false) }
+    var avatarToDownload: Avatar? by remember { mutableStateOf(null) }
+
+    val writeExternalStoragePermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            avatarToDownload?.let { onEvent(AvatarPickerEvent.DownloadAvatarTapped(it)) }
+        } else {
+            storagePermissionRationaleDialogVisible = true
+        }
+        avatarToDownload = null
+    }
+
+    val permissionAwareDownloadImageCallback: (Avatar) -> Unit = { avatar ->
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+            context.withPermission(
+                permission = Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                onRequestPermission = {
+                    avatarToDownload = avatar
+                    writeExternalStoragePermissionLauncher.launch(it)
+                },
+                onShowRationale = { storagePermissionRationaleDialogVisible = true },
+                grantedCallback = {
+                    onEvent(AvatarPickerEvent.DownloadAvatarTapped(avatar))
+                },
+            )
+        } else {
+            onEvent(AvatarPickerEvent.DownloadAvatarTapped(avatar))
+        }
+    }
+
     Surface(
         Modifier
             .fillMaxWidth()
@@ -198,6 +239,10 @@ internal fun AvatarPicker(uiState: AvatarPickerUiState, onEvent: (AvatarPickerEv
                                 AvatarOption.DELETE -> {
                                     onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatar))
                                 }
+
+                                AvatarOption.DOWNLOAD_IMAGE -> {
+                                    permissionAwareDownloadImageCallback(avatar)
+                                }
                             }
                         },
                         onLocalImageSelected = { onEvent(AvatarPickerEvent.LocalImageSelected(it)) },
@@ -216,6 +261,37 @@ internal fun AvatarPicker(uiState: AvatarPickerUiState, onEvent: (AvatarPickerEv
             onRetryClicked = { onEvent(AvatarPickerEvent.ImageCropped(it)) },
             onDismiss = { onEvent(AvatarPickerEvent.FailedAvatarDialogDismissed) },
         )
+        DownloadManagerDisabledAlertDialog(
+            isVisible = uiState.downloadManagerDisabled,
+            onDismiss = { onEvent(AvatarPickerEvent.DownloadManagerDisabledDialogDismissed) },
+            onConfirm = {
+                onEvent(AvatarPickerEvent.DownloadManagerDisabledDialogDismissed)
+                openDownloadManagerSettings(context)
+            },
+        )
+        PermissionRationaleDialog(
+            isVisible = storagePermissionRationaleDialogVisible,
+            message = stringResource(R.string.gravatar_qe_write_external_storage_permission_rationale_message),
+            onConfirmation = {
+                storagePermissionRationaleDialogVisible = false
+                context.openAppPermissionSettings()
+            },
+            onDismiss = { storagePermissionRationaleDialogVisible = false },
+        )
+    }
+}
+
+@Suppress("SwallowedException")
+private fun openDownloadManagerSettings(context: Context) {
+    try {
+        // Open the specific App Info page:
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.setData(Uri.parse("package:com.android.providers.downloads"))
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        // Open the generic Apps page:
+        val intent = Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS)
+        context.startActivity(intent)
     }
 }
 
@@ -269,6 +345,26 @@ private fun AvatarPickerAction.handle(
                 ) {
                     viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatar))
                 }
+            }
+        }
+
+        AvatarPickerAction.AvatarDownloadStarted -> {
+            scope.launch {
+                snackState.showQESnackbar(
+                    message = context.getString(R.string.gravatar_qe_image_download_queued),
+                    withDismissAction = true,
+                    snackbarType = SnackbarType.Info,
+                )
+            }
+        }
+
+        AvatarPickerAction.DownloadManagerNotAvailable -> {
+            scope.launch {
+                snackState.showQESnackbar(
+                    message = context.getString(R.string.gravatar_qe_download_manager_not_available),
+                    withDismissAction = true,
+                    snackbarType = SnackbarType.Error,
+                )
             }
         }
     }
