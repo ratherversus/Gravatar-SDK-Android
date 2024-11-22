@@ -29,12 +29,13 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.gravatar.quickeditor.R
 import com.gravatar.quickeditor.ui.avatarpicker.AvatarUi
 import com.gravatar.quickeditor.ui.avatarpicker.AvatarsSectionUiState
 import com.gravatar.quickeditor.ui.editor.AvatarPickerContentLayout
-import com.gravatar.quickeditor.ui.extensions.getPaddedBounds
 import com.gravatar.restapi.models.Avatar
 import com.gravatar.ui.GravatarTheme
 import java.net.URI
@@ -155,6 +156,25 @@ internal fun VerticalAvatarsSection(
             }
         }
     }
+}
+
+private fun Rect.getPaddedBounds(
+    paddingValues: PaddingValues,
+    density: Density,
+    layoutDirection: LayoutDirection,
+): Rect {
+    // Convert PaddingValues to Px
+    val startPaddingPx = with(density) { paddingValues.calculateLeftPadding(layoutDirection).toPx() }
+    val topPaddingPx = with(density) { paddingValues.calculateTopPadding().toPx() }
+    val endPaddingPx = with(density) { paddingValues.calculateRightPadding(layoutDirection).toPx() }
+    val bottomPaddingPx = with(density) { paddingValues.calculateBottomPadding().toPx() }
+
+    return Rect(
+        left = this.left + startPaddingPx,
+        top = this.top + topPaddingPx,
+        right = this.right - endPaddingPx,
+        bottom = this.bottom - bottomPaddingPx,
+    )
 }
 
 @Composable

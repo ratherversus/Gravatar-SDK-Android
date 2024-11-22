@@ -18,11 +18,9 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.gravatar.quickeditor.ui.avatarpicker.AvatarUi
-import com.gravatar.quickeditor.ui.extensions.getPaddedBounds
 import com.gravatar.restapi.models.Avatar
 import java.net.URL
 
@@ -38,13 +36,10 @@ internal fun LazyAvatarRow(
 ) {
     var parentBounds by remember { mutableStateOf(Rect(Offset.Zero, Size.Zero)) }
 
-    val density = LocalDensity.current
-    val layoutDirection = LocalLayoutDirection.current
-
     LazyRow(
         horizontalArrangement = horizontalArrangement,
         modifier = modifier.onGloballyPositioned { coordinates ->
-            parentBounds = coordinates.boundsInRoot().getPaddedBounds(contentPadding, density, layoutDirection)
+            parentBounds = coordinates.boundsInRoot()
         },
         state = state,
         contentPadding = contentPadding,

@@ -41,14 +41,14 @@ import com.composables.core.rememberDialogState
 internal fun PickerPopup(
     anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
-    maxBounds: Rect? = null,
+    popupDrawArea: Rect? = null,
     onDismissRequest: () -> Unit,
     popupItems: List<PickerPopupItem>,
 ) {
     PickerPopup(
         anchorAlignment = anchorAlignment,
         anchorBounds = anchorBounds,
-        maxBounds = maxBounds,
+        popupDrawArea = popupDrawArea,
         onDismissRequest = onDismissRequest,
         popupItems = popupItems,
         state = remember {
@@ -64,7 +64,7 @@ internal fun PickerPopup(
 private fun PickerPopup(
     anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
-    maxBounds: Rect? = null,
+    popupDrawArea: Rect? = null,
     onDismissRequest: () -> Unit,
     popupItems: List<PickerPopupItem>,
     state: MutableTransitionState<Boolean>,
@@ -83,7 +83,7 @@ private fun PickerPopup(
                 alignment = Alignment.TopStart,
                 onDismissRequest = onDismissRequest,
                 offset = IntOffset(
-                    calculatePopupXOffset(anchorAlignment, anchorBounds, maxBounds, popupSize),
+                    calculatePopupXOffset(anchorAlignment, anchorBounds, popupDrawArea, popupSize),
                     (anchorBounds.top - popupSize.height - 10.dp.dpToPx()).toInt(),
                 ),
                 properties = PopupProperties(focusable = true),

@@ -93,7 +93,7 @@ internal fun SelectableAvatar(
             AvatarMoreOptionsPickerPopup(
                 anchorAlignment = Alignment.Start,
                 anchorBounds = popupAnchorBounds,
-                maxBounds = parentBounds,
+                popupDrawArea = parentBounds,
                 onDismissRequest = { moreOptionsPopupVisible = false },
                 onAvatarOptionClicked = { avatarOption ->
                     moreOptionsPopupVisible = false
