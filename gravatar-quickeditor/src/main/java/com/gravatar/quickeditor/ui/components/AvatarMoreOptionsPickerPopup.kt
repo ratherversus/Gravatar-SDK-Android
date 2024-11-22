@@ -19,12 +19,14 @@ import com.gravatar.ui.GravatarTheme
 internal fun AvatarMoreOptionsPickerPopup(
     anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
+    popupDrawArea: Rect? = null,
     onDismissRequest: () -> Unit,
     onAvatarOptionClicked: (AvatarOption) -> Unit,
 ) {
     PickerPopup(
         anchorAlignment = anchorAlignment,
         anchorBounds = anchorBounds,
+        popupDrawArea = popupDrawArea,
         onDismissRequest = onDismissRequest,
         popupItems = listOf(
             PickerPopupItem(

@@ -25,8 +25,12 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.gravatar.quickeditor.R
 import com.gravatar.quickeditor.ui.avatarpicker.AvatarUi
@@ -47,9 +51,13 @@ internal fun VerticalAvatarsSection(
 ) {
     var popupVisible by remember { mutableStateOf(false) }
     var popupAnchorBounds: Rect by remember { mutableStateOf(Rect(Offset.Zero, Size.Zero)) }
+    var parentBounds by remember { mutableStateOf(Rect(Offset.Zero, Size.Zero)) }
     val gridState = rememberLazyGridState()
 
-    val sectionPadding = 16.dp
+    val density = LocalDensity.current
+    val layoutDirection = LocalLayoutDirection.current
+
+    val contentPadding = PaddingValues(16.dp)
     val itemSpacing = 8.dp
     Surface(modifier = modifier) {
         Box {
@@ -59,9 +67,11 @@ internal fun VerticalAvatarsSection(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.surfaceContainerHighest,
                     shape = RoundedCornerShape(8.dp),
-                ),
+                ).onGloballyPositioned { coordinates ->
+                    parentBounds = coordinates.boundsInRoot().getPaddedBounds(contentPadding, density, layoutDirection)
+                },
                 state = gridState,
-                contentPadding = PaddingValues(sectionPadding),
+                contentPadding = contentPadding,
                 horizontalArrangement = Arrangement.spacedBy(itemSpacing),
                 verticalArrangement = Arrangement.spacedBy(itemSpacing),
             ) {
@@ -119,6 +129,7 @@ internal fun VerticalAvatarsSection(
                     items(items = state.avatars, key = { it.avatarId }) { avatarModel ->
                         Avatar(
                             avatar = avatarModel,
+                            parentBounds = parentBounds,
                             onAvatarSelected = { onAvatarSelected(avatarModel) },
                             onAvatarOptionClicked = { avatar, option -> onAvatarOptionClicked(avatar, option) },
                             size = avatarSize,
@@ -145,6 +156,25 @@ internal fun VerticalAvatarsSection(
             }
         }
     }
+}
+
+private fun Rect.getPaddedBounds(
+    paddingValues: PaddingValues,
+    density: Density,
+    layoutDirection: LayoutDirection,
+): Rect {
+    // Convert PaddingValues to Px
+    val startPaddingPx = with(density) { paddingValues.calculateLeftPadding(layoutDirection).toPx() }
+    val topPaddingPx = with(density) { paddingValues.calculateTopPadding().toPx() }
+    val endPaddingPx = with(density) { paddingValues.calculateRightPadding(layoutDirection).toPx() }
+    val bottomPaddingPx = with(density) { paddingValues.calculateBottomPadding().toPx() }
+
+    return Rect(
+        left = this.left + startPaddingPx,
+        top = this.top + topPaddingPx,
+        right = this.right - endPaddingPx,
+        bottom = this.bottom - bottomPaddingPx,
+    )
 }
 
 @Composable

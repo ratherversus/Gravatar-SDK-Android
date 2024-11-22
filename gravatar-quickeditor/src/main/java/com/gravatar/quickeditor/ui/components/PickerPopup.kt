@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -42,12 +41,14 @@ import com.composables.core.rememberDialogState
 internal fun PickerPopup(
     anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
+    popupDrawArea: Rect? = null,
     onDismissRequest: () -> Unit,
     popupItems: List<PickerPopupItem>,
 ) {
     PickerPopup(
         anchorAlignment = anchorAlignment,
         anchorBounds = anchorBounds,
+        popupDrawArea = popupDrawArea,
         onDismissRequest = onDismissRequest,
         popupItems = popupItems,
         state = remember {
@@ -63,6 +64,7 @@ internal fun PickerPopup(
 private fun PickerPopup(
     anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
+    popupDrawArea: Rect? = null,
     onDismissRequest: () -> Unit,
     popupItems: List<PickerPopupItem>,
     state: MutableTransitionState<Boolean>,
@@ -75,15 +77,13 @@ private fun PickerPopup(
             modifier = Modifier
                 .fillMaxSize(),
         ) {
-            val configuration = LocalConfiguration.current
-            val screenWidth = configuration.screenWidthDp.dp.dpToPx()
             var popupSize by remember { mutableStateOf(IntSize.Zero) }
 
             Popup(
                 alignment = Alignment.TopStart,
                 onDismissRequest = onDismissRequest,
                 offset = IntOffset(
-                    calculatePopupXOffset(anchorAlignment, anchorBounds, popupSize, screenWidth),
+                    calculatePopupXOffset(anchorAlignment, anchorBounds, popupDrawArea, popupSize),
                     (anchorBounds.top - popupSize.height - 10.dp.dpToPx()).toInt(),
                 ),
                 properties = PopupProperties(focusable = true),
@@ -151,16 +151,16 @@ internal data class PickerPopupItem(
 private fun calculatePopupXOffset(
     anchorAlignment: Alignment.Horizontal,
     anchorBounds: Rect,
+    maxBounds: Rect? = null,
     popupSize: IntSize,
-    screenWidth: Float,
 ): Int {
-    return when (anchorAlignment) {
-        Alignment.Start -> {
-            anchorBounds.left.toInt()
-        }
-        // Default to Alignment.CenterHorizontally
-        else -> {
-            ((screenWidth - popupSize.width) / 2).toInt()
-        }
+    val offset = when (anchorAlignment) {
+        Alignment.Start -> anchorBounds.left.toInt()
+        Alignment.End -> (anchorBounds.right - popupSize.width).toInt()
+        else -> (anchorBounds.left.toInt() + anchorBounds.width.toInt() / 2) - (popupSize.width / 2)
     }
+
+    return maxBounds?.let { bounds ->
+        offset.coerceIn(bounds.left.toInt(), (bounds.right - popupSize.width).toInt())
+    } ?: offset
 }
