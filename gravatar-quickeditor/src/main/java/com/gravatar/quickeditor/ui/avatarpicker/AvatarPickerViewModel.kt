@@ -67,9 +67,9 @@ internal class AvatarPickerViewModel(
             AvatarPickerEvent.FailedAvatarDialogDismissed -> dismissFailedUploadDialog()
             is AvatarPickerEvent.FailedAvatarTapped -> showFailedUploadDialog(event.uri)
             is AvatarPickerEvent.FailedAvatarDismissed -> removedFailedUpload(event.uri)
-            is AvatarPickerEvent.AvatarDeleteSelected -> deleteAvatar(event.avatar)
             is AvatarPickerEvent.DownloadAvatarTapped -> downloadAvatar(event.avatar)
             AvatarPickerEvent.DownloadManagerDisabledDialogDismissed -> hideDownloadManagerAlert()
+            is AvatarPickerEvent.AvatarDeleteSelected -> deleteAvatar(event.avatarId)
         }
     }
 
@@ -288,52 +288,55 @@ internal class AvatarPickerViewModel(
         }
     }
 
-    private fun deleteAvatar(avatar: Avatar) {
+    private fun deleteAvatar(avatarId: String) {
         viewModelScope.launch {
-            val avatarIndex = _uiState.value.emailAvatars?.avatars?.indexOfFirstOrNull { it.imageId == avatar.imageId }
-            val isSelectedAvatar = avatar.imageId == _uiState.value.emailAvatars?.selectedAvatarId
-            _uiState.update { currentState ->
-                currentState.copy(
-                    emailAvatars = currentState.emailAvatars?.copy(
-                        avatars = currentState.emailAvatars.avatars.filter { it.imageId != avatar.imageId },
-                        selectedAvatarId = if (currentState.emailAvatars.selectedAvatarId == avatar.imageId) {
-                            null
-                        } else {
-                            currentState.emailAvatars.selectedAvatarId
-                        },
-                    ),
-                    avatarUpdates = if (isSelectedAvatar) {
-                        currentState.avatarUpdates.inc()
-                    } else {
-                        currentState.avatarUpdates
-                    },
-                )
-            }
-            when (avatarRepository.deleteAvatar(email, avatar.imageId)) {
-                is GravatarResult.Success -> {
-                    // As we've already updated the UI, we don't need to do anything here
-                }
-
-                is GravatarResult.Failure -> {
-                    _actions.send(AvatarPickerAction.AvatarDeletionFailed(avatar))
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            emailAvatars = currentState.emailAvatars?.copy(
-                                avatars = currentState.emailAvatars.avatars.toMutableList().apply {
-                                    add(avatarIndex ?: 0, avatar)
-                                },
-                                selectedAvatarId = if (isSelectedAvatar) {
-                                    avatar.imageId
-                                } else {
-                                    currentState.emailAvatars.selectedAvatarId
-                                },
-                            ),
-                            avatarUpdates = if (isSelectedAvatar) {
-                                currentState.avatarUpdates.inc()
+            val avatarIndex = _uiState.value.emailAvatars?.avatars?.indexOfFirstOrNull { it.imageId == avatarId }
+            val isSelectedAvatar = avatarId == _uiState.value.emailAvatars?.selectedAvatarId
+            val avatar = avatarIndex?.let { _uiState.value.emailAvatars?.avatars?.get(avatarIndex) }
+            if (avatar != null) {
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        emailAvatars = currentState.emailAvatars?.copy(
+                            avatars = currentState.emailAvatars.avatars.filter { it.imageId != avatarId },
+                            selectedAvatarId = if (currentState.emailAvatars.selectedAvatarId == avatarId) {
+                                null
                             } else {
-                                currentState.avatarUpdates
+                                currentState.emailAvatars.selectedAvatarId
                             },
-                        )
+                        ),
+                        avatarUpdates = if (isSelectedAvatar) {
+                            currentState.avatarUpdates.inc()
+                        } else {
+                            currentState.avatarUpdates
+                        },
+                    )
+                }
+                when (avatarRepository.deleteAvatar(email, avatarId)) {
+                    is GravatarResult.Success -> {
+                        // As we've already updated the UI, we don't need to do anything here
+                    }
+
+                    is GravatarResult.Failure -> {
+                        _actions.send(AvatarPickerAction.AvatarDeletionFailed(avatarId))
+                        _uiState.update { currentState ->
+                            currentState.copy(
+                                emailAvatars = currentState.emailAvatars?.copy(
+                                    avatars = currentState.emailAvatars.avatars.toMutableList().apply {
+                                        add(avatarIndex, avatar)
+                                    },
+                                    selectedAvatarId = if (isSelectedAvatar) {
+                                        avatarId
+                                    } else {
+                                        currentState.emailAvatars.selectedAvatarId
+                                    },
+                                ),
+                                avatarUpdates = if (isSelectedAvatar) {
+                                    currentState.avatarUpdates.inc()
+                                } else {
+                                    currentState.avatarUpdates
+                                },
+                            )
+                        }
                     }
                 }
             }

@@ -780,7 +780,7 @@ class AvatarPickerViewModelTest {
         viewModel.uiState.test {
             expectMostRecentItem()
             val avatarToDelete = avatars.first()
-            viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarToDelete))
+            viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarToDelete.imageId))
             val avatarPickerUiState = AvatarPickerUiState(
                 email = email,
                 emailAvatars = emailAvatarsCopy.copy(avatars = avatars.minus(avatarToDelete), selectedAvatarId = null),
@@ -812,7 +812,7 @@ class AvatarPickerViewModelTest {
         viewModel.uiState.test {
             expectMostRecentItem()
             val avatarToDelete = avatars.last() // Non selected avatar
-            viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarToDelete))
+            viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarToDelete.imageId))
             val avatarPickerUiState = AvatarPickerUiState(
                 email = email,
                 emailAvatars = emailAvatarsCopy.copy(
@@ -847,7 +847,7 @@ class AvatarPickerViewModelTest {
         viewModel.uiState.test {
             expectMostRecentItem()
             val avatarToDelete = avatars.first()
-            viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarToDelete))
+            viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarToDelete.imageId))
 
             awaitItem()
 
@@ -865,7 +865,7 @@ class AvatarPickerViewModelTest {
                 awaitItem(),
             )
             viewModel.actions.test {
-                assertEquals(AvatarPickerAction.AvatarDeletionFailed(avatarToDelete), awaitItem())
+                assertEquals(AvatarPickerAction.AvatarDeletionFailed(avatarToDelete.imageId), awaitItem())
             }
         }
     }
@@ -885,7 +885,7 @@ class AvatarPickerViewModelTest {
         viewModel.uiState.test {
             expectMostRecentItem()
             val avatarToDelete = avatars.last() // Non selected avatar
-            viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarToDelete))
+            viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarToDelete.imageId))
 
             awaitItem()
 
@@ -903,7 +903,7 @@ class AvatarPickerViewModelTest {
                 awaitItem(),
             )
             viewModel.actions.test {
-                assertEquals(AvatarPickerAction.AvatarDeletionFailed(avatarToDelete), awaitItem())
+                assertEquals(AvatarPickerAction.AvatarDeletionFailed(avatarToDelete.imageId), awaitItem())
             }
         }
     }

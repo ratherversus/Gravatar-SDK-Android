@@ -51,6 +51,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gravatar.extensions.defaultProfile
 import com.gravatar.quickeditor.R
 import com.gravatar.quickeditor.data.repository.EmailAvatars
+import com.gravatar.quickeditor.ui.components.AvatarDeletionConfirmationDialog
 import com.gravatar.quickeditor.ui.components.AvatarOption
 import com.gravatar.quickeditor.ui.components.AvatarsSection
 import com.gravatar.quickeditor.ui.components.DownloadManagerDisabledAlertDialog
@@ -176,6 +177,7 @@ internal fun AvatarPicker(uiState: AvatarPickerUiState, onEvent: (AvatarPickerEv
         }
     }
 
+    var confirmAvatarDeletion by rememberSaveable { mutableStateOf<String?>(null) }
     Surface(
         Modifier
             .fillMaxWidth()
@@ -237,7 +239,7 @@ internal fun AvatarPicker(uiState: AvatarPickerUiState, onEvent: (AvatarPickerEv
                             when (avatarOption) {
                                 AvatarOption.ALT_TEXT -> Unit
                                 AvatarOption.DELETE -> {
-                                    onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatar))
+                                    confirmAvatarDeletion = avatar.imageId
                                 }
 
                                 AvatarOption.DOWNLOAD_IMAGE -> {
@@ -278,6 +280,15 @@ internal fun AvatarPicker(uiState: AvatarPickerUiState, onEvent: (AvatarPickerEv
             },
             onDismiss = { storagePermissionRationaleDialogVisible = false },
         )
+        confirmAvatarDeletion?.let {
+            AvatarDeletionConfirmationDialog(
+                onConfirm = {
+                    onEvent(AvatarPickerEvent.AvatarDeleteSelected(it))
+                    confirmAvatarDeletion = null
+                },
+                onDismiss = { confirmAvatarDeletion = null },
+            )
+        }
     }
 }
 
@@ -343,7 +354,7 @@ private fun AvatarPickerAction.handle(
                         duration = SnackbarDuration.Long,
                     ) == QESnackbarResult.ActionPerformed
                 ) {
-                    viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatar))
+                    viewModel.onEvent(AvatarPickerEvent.AvatarDeleteSelected(avatarId))
                 }
             }
         }
