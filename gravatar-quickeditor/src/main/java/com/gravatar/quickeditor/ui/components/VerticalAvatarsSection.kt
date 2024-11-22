@@ -25,6 +25,8 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,6 +34,7 @@ import com.gravatar.quickeditor.R
 import com.gravatar.quickeditor.ui.avatarpicker.AvatarUi
 import com.gravatar.quickeditor.ui.avatarpicker.AvatarsSectionUiState
 import com.gravatar.quickeditor.ui.editor.AvatarPickerContentLayout
+import com.gravatar.quickeditor.ui.extensions.getPaddedBounds
 import com.gravatar.restapi.models.Avatar
 import com.gravatar.ui.GravatarTheme
 import java.net.URI
@@ -50,7 +53,10 @@ internal fun VerticalAvatarsSection(
     var parentBounds by remember { mutableStateOf(Rect(Offset.Zero, Size.Zero)) }
     val gridState = rememberLazyGridState()
 
-    val sectionPadding = 16.dp
+    val density = LocalDensity.current
+    val layoutDirection = LocalLayoutDirection.current
+
+    val contentPadding = PaddingValues(16.dp)
     val itemSpacing = 8.dp
     Surface(modifier = modifier) {
         Box {
@@ -60,9 +66,11 @@ internal fun VerticalAvatarsSection(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.surfaceContainerHighest,
                     shape = RoundedCornerShape(8.dp),
-                ).onGloballyPositioned { coordinates -> parentBounds = coordinates.boundsInRoot() },
+                ).onGloballyPositioned { coordinates ->
+                    parentBounds = coordinates.boundsInRoot().getPaddedBounds(contentPadding, density, layoutDirection)
+                },
                 state = gridState,
-                contentPadding = PaddingValues(sectionPadding),
+                contentPadding = contentPadding,
                 horizontalArrangement = Arrangement.spacedBy(itemSpacing),
                 verticalArrangement = Arrangement.spacedBy(itemSpacing),
             ) {
